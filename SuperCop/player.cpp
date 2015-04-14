@@ -153,3 +153,43 @@ void Player::standBy()
     if(lastActionPressed == 4)
         changeImage("../SuperCop/Images/Running/Run1_1.png");
 }
+
+void Player::setPosX(int x)
+{
+    posX=x;
+}//Mutator
+
+void Player::setPosY(int y)
+{
+    posY=y;
+}//Mutator
+
+void Player::setSizeX(int x)
+{
+    sizeX=x;
+}//Mutator
+
+void Player::setSizeY(int y)
+{
+    sizeY=y;
+}//Mutator
+
+int Player::getPosX()
+{
+    return posX;
+}//Accessor
+
+int Player::getPosY()
+{
+   return posY;
+}//Accessor
+
+int Player::getSizeX()
+{
+  return sizeX;
+}//Accessor
+
+int Player::getSizeY()
+{
+    return sizeY;
+}//Accessor
