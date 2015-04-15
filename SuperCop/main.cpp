@@ -6,6 +6,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QApplication::setKeyboardInputInterval(10);
     MainWindow w;
     w.show();
 

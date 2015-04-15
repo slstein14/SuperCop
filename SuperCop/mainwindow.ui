@@ -65,6 +65,9 @@
    <property name="text">
     <string>Exit</string>
    </property>
+   <property name="shortcut">
+    <string>Esc</string>
+   </property>
   </action>
   <action name="Easy_1P">
    <property name="enabled">
@@ -72,6 +75,9 @@
    </property>
    <property name="text">
     <string>Easy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
    </property>
   </action>
   <action name="Medium_1P">

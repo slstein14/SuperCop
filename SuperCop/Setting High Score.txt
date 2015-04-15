@@ -1,0 +1,63 @@
+#include <fstream>
+using namespace std;
+
+//some endgame code which holds that game's score as gamescore
+
+ifstream scoreset;
+scoreset.open("../SuperCop/highscores.txt");
+int scores;
+
+if(scoreset.is_open()){
+
+       scoreset>>scores;
+       int firstscore=scores;
+       scoreset>>scores;
+       int secondscore=scores;
+       scoreset>>scores;
+       int thirdscore=scores;
+       scoreset>>scores;
+       int fourthscore=scores;
+       scoreset>>scores;
+       int fifthscore=scores;
+       scoreset.close();
+
+	if(firstscore<gamescore){
+		fifthscore=fourthscore;
+		fourthscore=thirdscore;
+		thirdscore=secondscore;
+		secondscore=firstscore;
+		firstscore=gamescore;
+//maybe add a window which declares "New High Score" in this case-time permitting
+	}
+	else if(secondscore<gamescore){
+		fifthscore=fourthscore;
+		fourthscore=thirdscore;
+		thirdscore=secondscore;
+		secondscore=gamescore;
+	}
+	else if(thirdscore<gamescore){
+		fifthscore=fourthscore;
+		fourthscore=thirdscore;
+		thirdscore=gamescore;
+	}
+	else if(fourthscore<gamescore){
+		fifthscore=fourthscore;
+		fourthscore=gamescore;
+	}
+	else if(fifthscore<gamescore){
+		fifthscore=gamescore;
+	}
+	
+	ofstream setscores;
+	setscores.open("../SuperCop/highscores.txt");
+
+	setscores<<firstscore<<endl;
+	setscores<<secondscore<<endl;
+	setscores<<thirdscore<<endl;
+	setscores<<fourthscore<<endl;
+	setscores<<fifthscore<<endl;
+
+	setscores.close();
+	}
+
+}//resets high scores if new high score acheived

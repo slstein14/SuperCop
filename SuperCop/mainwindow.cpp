@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QPixmap bkgnd("../SuperCop/SuperCop.png");
+    QPixmap bkgnd("../SuperCop/Images/SuperCop.png");
         bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
         QPalette palette;
         palette.setBrush(QPalette::Background, bkgnd);
@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
         contact = NULL;
         controls = NULL;
         hScore = NULL;
+        scg = NULL;
+
 }//Sets the background image for the main menu
 
 MainWindow::~MainWindow()
@@ -25,6 +27,7 @@ MainWindow::~MainWindow()
     delete contact;
     delete controls;
     delete hScore;
+    delete scg;
 }//Clears potential memory leaks
 
 void MainWindow::on_actionExit_triggered()
@@ -52,6 +55,21 @@ void MainWindow::on_actionHigh_Scores_triggered()
 {
     if(hScore==NULL){
         hScore = new HighScores();
+    }else{
+        delete hScore;
+        hScore = new HighScores();
     }
     hScore->show();
 }//Opens an instance of the High Score window
+
+void MainWindow::on_Easy_1P_triggered()
+{
+    if(scg == NULL)
+    {
+        scg = new SuperCopGame();
+    }else{
+        delete scg;
+        scg = new SuperCopGame();
+    }
+    scg->show();
+}

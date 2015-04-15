@@ -5,7 +5,10 @@
 #include "contactus.h"
 #include "controls.h"
 #include "highscores.h"
+#include "supercopgame.h"
+
 #include <QMainWindow>
+#include <QtQuick/QQuickView>
 
 namespace Ui {
 class MainWindow;
@@ -28,11 +31,14 @@ private slots:
 
     void on_actionHigh_Scores_triggered();
 
+    void on_Easy_1P_triggered();
+
 private:
     Ui::MainWindow *ui;
     ContactUs* contact;
     Controls* controls;
     HighScores* hScore;
+    SuperCopGame *scg;
 };
 
 #endif // MAINWINDOW_H

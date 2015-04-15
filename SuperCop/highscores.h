@@ -17,6 +17,9 @@ public:
     explicit HighScores(QWidget *parent = 0);
     ~HighScores();
 
+private slots:
+    void on_reset_clicked();
+
 private:
     Ui::HighScores *ui;
 };
