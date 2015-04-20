@@ -18,14 +18,18 @@ SOURCES += main.cpp\
     contactus.cpp \
     highscores.cpp \
     supercopgame.cpp \
-    player.cpp
+    player.cpp \
+    enemy.cpp \
+    levelbase.cpp
 
 HEADERS  += mainwindow.h \
     controls.h \
     contactus.h \
     highscores.h \
     supercopgame.h \
-    player.h
+    player.h \
+    enemy.h \
+    levelbase.h
 
 FORMS    += mainwindow.ui \
     controls.ui \
