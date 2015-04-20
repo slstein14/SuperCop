@@ -8,19 +8,27 @@
 #include <QPixmap>
 #include <QKeyEvent>
 
-class Player : public QObject
+class Player : QObject
 {
 
 private:
     enum keyPressed {NONE = 0, RIGHT = 1, UP = 2, DOWN = 3, LEFT = 4};
-    enum keyPress2 {W = UP, A = LEFT, S = DOWN, D = RIGHT};
+//    enum keyPress2 {W = UP, A = LEFT, S = DOWN, D = RIGHT};
+    enum direction {WEST = -1, STAND = 0, EAST = 1};
 
-    int posX;
-    int posY;
-    int sizeX;
-    int sizeY;
+    bool rolling, jumping, moveLeft, moveRight;
+    bool collided;
+    int posX, posY;
+    int sizeX, sizeY;
+    double playerJumpSpeed, fallTime, gravity;
+
     int frame;
+    int leftBound, rightBound;
+    int ground;
+
     int lastActionPressed;
+    int playerDirection;
+
     QPixmap *image;
 
 public:
@@ -42,12 +50,25 @@ public:
     void setPosY(int y);
     void setSizeX(int x);
     void setSizeY(int y);
+    void setCollided(bool collided);
+    void setSpeedY(int y);
 
     int getPosX();
     int getPosY();
     int getSizeX();
     int getSizeY();
     int getFrame();
+    int getLeftBound();
+    int getRightBound();
+    int getPlayerDirection();
+    int getGround();
+    int getSpeedY();
+
+    bool isRolling();
+    bool isJumping();
+    bool isMoveRight();
+    bool isMoveLeft();
+    bool isCollided();
 
 public slots:
     void playerAction(int action);

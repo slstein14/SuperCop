@@ -1,0 +1,895 @@
+diff --cc SuperCop/player.cpp
+index bf82bc6,25dddec..0000000
+--- a/SuperCop/player.cpp
++++ b/SuperCop/player.cpp
+@@@ -1,25 -1,26 +1,37 @@@
+  #include "Player.h"
+--#include "player.h"
+++//#include "player.h"
+  #include "supercopgame.h"
+  #include <QDebug>
+  #include <QKeyEvent>
+  #include <QTimer>
+  
+ +
+  Player::Player(QWidget *parent)
+  {
+-     posX = parent->width() / 3;
+ -    posX = 10;
+--    posY = parent->height() - 220;
+--    sizeX = 50;
+--    sizeY = 86;
+ -    image = new QPixmap("../SuperCop/Images/player.png");
+ -    animationTimer = new QTimer();
+ -    animationTimer->setInterval(17);
+++    posX = (parent->width() / 6) + 20;
+++    posY = parent->height() - 140;
+++    sizeX = 25;
+++    sizeY = 43;
+ +    image = new QPixmap("../SuperCop/Images/Running/Run0_1.png");
+++
+      frame = 0;
+ -    animationTimer->start();
+      lastActionPressed = 0;
+- 
+- //    playerScreenPos(parent);
+++    playerDirection = 0;
++ 
+ -//    playerScreenPos(parent);
+++    leftBound = parent->width() / 6;
+++    rightBound = parent->width() - (parent->width() / 6);
+++    ground = parent->height() - 140;
+++
+++    rolling = false;
+++    jumping = false;
+++    moveRight = false;
+++    moveLeft = false;
+++    collided = true;
+++    playerJumpSpeed = 5; //pixels/s
+++    gravity = 8; //pixels/s^2
+  }
+  
+ +
+  Player::~Player()
+  {
+      delete image;
+@@@ -29,32 -31,30 +41,48 @@@
+  void Player::drawPlayer(QPainter &painter)
+  {
+      painter.drawPixmap(posX, posY, sizeX, sizeY, *image);
+++
+++    //For debugging purposes
+++    painter.setPen(Qt::red);
+++    painter.drawLine(rightBound, posY + 43, rightBound, posY - 43);
+++    painter.drawLine(leftBound, posY + 43, leftBound, posY - 43);
+  }
+  
+ +
+  void Player::changeImage(QString str)
+  {
+      delete image;
+      image = new QPixmap(str);
+  }
+  
+ -void Player::playerScreenPos(QWidget *w)
+ +
+- void Player::playerScreenPos(QWidget *w)
+++void Player::playerScreenPos(QWidget *w = 0)
+  {
+++    //Check where player is on screen. If within a predefined rect, do not scroll screen.
+++    //If on edge of rect, move camera in direction player is running
+++    if(1 == lastActionPressed && ( this->posX + 25 < rightBound))
+++    {
+++        this->setPosX(this->getPosX() + 10);
+++    }
+  
+++    if (4 == lastActionPressed && (this->posX > leftBound))
+++    {
+++        this->setPosX(this->getPosX() - 10);
+++    }
+  }
+  
+ -int Player::playerAction(int action)
+ +
+ +void Player::playerAction(int action)
+  {
+      //If the new direction does not match the previous direction, reset the frame counter to zero.
+      if(action != lastActionPressed)
+      {
+ -        qDebug() << "Last action: " << lastActionPressed;
+ -        qDebug() << "New aciton: " << action;
+          frame = 0;
+          lastActionPressed = action;
+++//        qDebug() << playerDirection;
+      }
+  
+- 
+++//    qDebug() << playerDirection;
+      //Checks which direction is being called then runs the appropriate function
+      switch (action)
+      {
+@@@ -74,87 -76,120 +102,303 @@@
+          standBy();
+          break;
+      }
++ 
+ -    lastActionPressed = action;
+++    playerScreenPos();
+  }
+  
+ -int Player::jump()
+ -{
+ -    return 0;
+ -    //IGNORE THIS FUNCTION FOR NOW
+ -}
+  
+ -int Player::roll()
+ +void Player::jump()
+  {
+-     frame = 0;
+-     changeImage("../SuperCop/Images/Running/Run0_1.png");
+-     //IGNORE THIS FUNCTION FOR NOW
+- }
+ -        frame++;
+ -        QString imagePath = QString("../SuperCop/Images/Rolling/Roll%1.png").arg(QString::number(frame));
+++//    frame++;
+++
+++//    if(0 < this->getFrame() && 15 > this->getFrame())
+++//    {
+++        QString imagePath;
+++        jumping = true;
+++        collided = false;
+++//        if(0 < this->getFrame() && 5 > this->getFrame())
+++//        {
+++            switch(playerDirection)
+++            {
+++            case WEST:
+++                imagePath = QString("../SuperCop/Images/Running/Run1_1.png");
+++                changeImage(imagePath);
+++                fallTime = playerJumpSpeed / gravity;
+++                posY = static_cast<int>((playerJumpSpeed * fallTime) - (0.5 * gravity * (fallTime * fallTime)));
+++                break;
+++            case EAST:
+++                imagePath = QString("../SuperCop/Images/Running/Run0_1.png");
+++                changeImage(imagePath);
+++                fallTime = playerJumpSpeed / gravity;
+++                posY = static_cast<int>((playerJumpSpeed * fallTime) - (0.5 * gravity * (fallTime * fallTime)));
+++                break;
+++            case STAND:
+++                break;
+++            }
+++//        }
+++//        else
+++//        {
+++//            SuperCopGame *w;
+++//            switch(playerDirection)
+++//            {
+++//            case WEST:
+++//                imagePath = QString("../SuperCop/Images/Running/Run1_1.png");
+++//                changeImage(imagePath);
+++//                w->physics();
+++//                break;
+++//            case EAST:
+++//                imagePath = QString("../SuperCop/Images/Running/Run0_1.png");
+++//                changeImage(imagePath);
+++//                w->physics();
+++//                break;
+++//            case STAND:
+++//                break;
+++//            }
+++//        }
+++//    }
+++//    else
+++//    {
+++//        jumping = false;
+++//        standBy();
+++//        this->setPosY(ground);
++ 
+ -        //Resizes the player to half size
+ -        sizeX = 25;
+ -        sizeY = 40;
+++//    }
+++}//Player State
+ +
+ +
+ +void Player::roll()
+ +{
+ +    frame++;
+  
+-     if(0 < frame && 9 > frame)
+-     {
+-         //Resizes the player to half size
+- 
+-         QString imagePath = QString("../SuperCop/Images/Rolling/Roll%1.png").arg(QString::number(frame));
+-         changeImage(imagePath);
+-         frame++;
+ -        if(9 > frame)
+++    if(0 < this->getFrame() && 9 > this->getFrame())
+++    {    
+++        QString imagePath;
+++        rolling = true;
+++        if(0 < this->getFrame() && 4 > this->getFrame())
++         {
+ -            changeImage(imagePath);
+ -//            return 3;
+++            switch(playerDirection)
+++            {
+++            case WEST:
+++                this->setPosX(this->getPosX() - 8);
+++                imagePath = QString("../SuperCop/Images/Rolling/Roll1_%1.png").arg(QString::number(frame));
+++                changeImage(imagePath);
+++                break;
+++            case EAST:
+++                this->setPosX(this->getPosX() + 8);
+++                imagePath = QString("../SuperCop/Images/Rolling/Roll0_%1.png").arg(QString::number(frame));
+++                changeImage(imagePath);
+++                break;
+++            case STAND:
+++                break;
+++            }
++         }
++         else
++         {
+ -            //After one loop, return the player to normal size and continue running to the right.
+ -            sizeX = 50;
+ -            sizeY = 81;
+ -            frame = 0;
+ -
+ -            return 0;
+++            switch(playerDirection)
+++            {
+++            case WEST:
+++                this->setPosX(this->getPosX() - 3);
+++                imagePath = QString("../SuperCop/Images/Rolling/Roll1_%1.png").arg(QString::number(frame));
+++                changeImage(imagePath);
+++                break;
+++            case EAST:
+++                this->setPosX(this->getPosX() + 3);
+++                imagePath = QString("../SuperCop/Images/Rolling/Roll0_%1.png").arg(QString::number(frame));
+++                changeImage(imagePath);
+++                break;
+++            case STAND:
+++                break;
+++            }
++         }
+ -}
+ +    }
+ +    else
+ +    {
+-         //After one loop, return the player to normal size and continue running to the right.
+-         sizeX = 50;
+-         sizeY = 86;
+-         frame = 0;
+-         changeImage("../SuperCop/Images/Running/Run0_1.png");
+-         lastActionPressed = 0;
+++        rolling == false;
+++        standBy();
+ +    }
+- }
+++
+++}//Player State
+ +
+  
+ -int Player::run()
+ +void Player::run()
+  {
+      frame++;
+      QString imagePath = QString("../SuperCop/Images/Running/Run0_%1.png").arg(frame);
+  
+-     if(0 < frame && 4 > frame)
+ -    if(4 > frame)
+++    if(0 < this->getFrame() && 4 > this->getFrame())
+      {
+          changeImage(imagePath);
+ -//        return 1;
+++        moveRight = true;
+++        playerDirection = 1;
+      }
+      else
+      {
+          frame = 0;
+ -        return 0;
+++        moveRight = false;
+++        playerDirection = 1;
+ +        changeImage("../SuperCop/Images/Running/Run0_1.png");
+      }
+--}
+++}//Player State
+ +
+  
+ -int Player::runInverted()
+ +void Player::runInverted()
+  {
+      frame++;
+ +
+      QString imagePath = QString("../SuperCop/Images/Running/Run1_%1.png").arg(frame);
+  
+-     if(0 < frame && 4 > frame)
+ -    if(4 > frame)
+++    if(0 < this->getFrame() && 4 > this->getFrame())
+      {
+++        moveLeft = true;
+          changeImage(imagePath);
+ -//        return 0;
+++        playerDirection = -1;
+      }
+      else
+      {
+          frame = 0;
+ -        return 0;
+++        moveLeft = false;
+ +        changeImage("../SuperCop/Images/Running/Run1_1.png");
+++        playerDirection = -1;
+      }
+--}
+- 
+++}//Player State
+  
+  void Player::standBy()
+  {
+-     if(1 == lastActionPressed)
+ -    if(lastActionPressed == 1)
+++    //Checks which direction the player was moving last then sets the appropiate standing image
+++    if(1 == playerDirection)
+++    {
+          changeImage("../SuperCop/Images/Running/Run0_1.png");
+--
+-     if(4 == lastActionPressed)
+ -    if(lastActionPressed == 4)
+++        collided = true;
+++    }
+++    if(-1 == playerDirection)
+++    {
+          changeImage("../SuperCop/Images/Running/Run1_1.png");
+++        collided = true;
+++    }
+ +}
+ +
+ +
+ +int Player::getFrame()
+ +{
+ +    return frame;
+++}//Accessor
+++
+++int Player::getLeftBound()
+++{
+++    return leftBound;
+++}//Accessor
+++
+++int Player::getRightBound()
+++{
+++    return rightBound;
++ }
++ 
+++int Player::getPlayerDirection()
+++{
+++    return playerDirection;
+++}
+++
+++int Player::getGround()
+++{
+++    return ground;
+++}
+++
+++int Player::getSpeedY()
+++{
+++    return playerJumpSpeed;
+++}//Accessor
+++
+++
+++bool Player::isRolling()
+++{
+++    return rolling;
+++}//Accessor
+++
+++
+++bool Player::isJumping()
+++{
+++    return jumping;
+++}//Accessor
+++
+++
+++
+++bool Player::isMoveRight()
+++{
+++    return moveRight;
+++}//Accessor
+++
+++
+++
+++bool Player::isMoveLeft()
+++{
+++    return moveLeft;
+++}
+++
+++bool Player::isCollided()
+++{
+++    return collided;
+++}//Accessor
+++
+++
++ void Player::setPosX(int x)
++ {
++     posX=x;
++ }//Mutator
++ 
+++
+++
++ void Player::setPosY(int y)
++ {
++     posY=y;
++ }//Mutator
++ 
+++
+++
++ void Player::setSizeX(int x)
++ {
++     sizeX=x;
++ }//Mutator
++ 
+++
++ void Player::setSizeY(int y)
++ {
++     sizeY=y;
+++}
+++
+++void Player::setCollided(bool collided)
+++{
+++    this->collided = collided;
+ +}
+++
+++void Player::setSpeedY(int y)
+++{
+++    this->playerJumpSpeed = y;
++ }//Mutator
++ 
+++
+++
++ int Player::getPosX()
++ {
++     return posX;
++ }//Accessor
++ 
+++
+++
++ int Player::getPosY()
++ {
++    return posY;
++ }//Accessor
++ 
+++
+++
++ int Player::getSizeX()
++ {
++   return sizeX;
++ }//Accessor
++ 
+++
+++
++ int Player::getSizeY()
++ {
++     return sizeY;
++ }//Accessor
+diff --cc SuperCop/supercopgame.cpp
+index 9513c05,3b3fabf..0000000
+--- a/SuperCop/supercopgame.cpp
++++ b/SuperCop/supercopgame.cpp
+@@@ -7,16 -7,14 +7,19 @@@
+  #include <QDebug>
+  #include <ctime>
+  #include <cstdlib>
++ #include <fstream>
++ using namespace std;
+  
+ -SuperCopGame::SuperCopGame(QWidget *parent) :parent(parent)
+  
+ +
+ +SuperCopGame::SuperCopGame(QWidget *parent) :
+ +    QWidget(parent)
+  {
+      srand(time(0));
+      player = new Player(this);
+++    lb = new LevelBase(this);
+ +
+ +    //Sets the Game Background (Currently Temporary)
+      QPixmap bkgnd("../SuperCop/Images/background_temp.jpg");
+          bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+          QPalette palette;
+@@@ -27,21 -25,15 +30,22 @@@
+      timer->setInterval(40);
+      connect(timer, SIGNAL(timeout()), this, SLOT(updateField()));
+      timer->start();
+ -   robot = new QPixmap("../SuperCop/Images/robot.png");
+ -    lastKeyPress = 1;
+ -    gamescore=0;
+ -    picX=600;
+ -    picY=250;
+ -    picHeight = 100;
+ -    picWidth = 100;
+ +
+ +    keyTimer = new QTimer();
+ +    keyTimer->setInterval(5);
+- //    connect(keyTimer, SIGNAL(timeout()), this, SLOT(pollKey()));
+++    connect(keyTimer, SIGNAL(timeout()), this, SLOT(pollKey()));
+ +    keyTimer->start();
+ +
+ +    isUpPressed = false;
+ +    isDownPressed = false;
+ +    isLeftPressed = false;
+ +    isRightPressed = false;
+ +
+ +    lastKeyPress = 0;
+++    gravity = 8; //pixels/s^2
+  }
+  
+ +
+  SuperCopGame::~SuperCopGame()
+  {
+      delete timer;
+@@@ -54,92 -44,39 +58,145 @@@ void SuperCopGame::keyPressEvent(QKeyEv
+  {
+      switch(evt->key())
+      {
+-     case Qt::Key_D:
++     case Qt::Key_Right:
+ -        qDebug() << "Right";
+ -        lastKeyPress = 1;
+ +        isRightPressed = true;
+          break;
+-     case Qt::Key_S:
++     case Qt::Key_Down:
+ -        qDebug() << "Down";
+ -        lastKeyPress = 3;
+ -        gamescore++;
+ +        isDownPressed = true;
+++//        gamescore++;
+          break;
+-     case Qt::Key_W:
++     case Qt::Key_Up:
+ -        qDebug() << "Up";
+ -        lastKeyPress = 2;
+ +        isUpPressed = true;
+          break;
+-     case Qt::Key_A:
++     case Qt::Key_Left:
+ -        qDebug() << "Left";
+ -        lastKeyPress = 4;
+ +        isLeftPressed = true;
+ +        break;
+ +    default:
+          break;
+      }
+ +}
+  
+ +
+ +void SuperCopGame::keyReleaseEvent(QKeyEvent *evt)
+ +{
+ +    switch(evt->key())
+ +    {
+-     case Qt::Key_D:
+++    case Qt::Key_Right:
+ +        isRightPressed = false;
+ +        break;
+-     case Qt::Key_S:
+++    case Qt::Key_Down:
+ +        isDownPressed = false;
+ +        break;
+-     case Qt::Key_W:
+++    case Qt::Key_Up:
+ +        isUpPressed = false;
+ +        break;
+-     case Qt::Key_A:
+++    case Qt::Key_Left:
+ +        isLeftPressed = false;
+ +        break;
+ +    default:
+ +        break;
+ +    }
+  }
+  
+ +
+  void SuperCopGame::setLastKeyPress(int key)
+  {
+      this->lastKeyPress = key;
+  }
+  
+ -void SuperCopGame::updateField()
+++void SuperCopGame::setPlatformX(int x)
+++{
+++    lb->setPlatformPosX(x);
+++}
+ +
+- void SuperCopGame::pollKey()
+++void SuperCopGame::obstacleMovement()
+ +{
+-     //Checks if any of the keys are pressed.
+-     if(isRightPressed || isLeftPressed || isUpPressed || isDownPressed)
+++    if((1 == player->getPlayerDirection()) && (player->getPosX() + player->getSizeX()) >= player->getRightBound())
+++    {
+++        lb->setPlatformPosX(lb->getPlatformPosX() - 5);
+++        lb->setStairPosX(lb->getStairPosX() - 5);
+++    }
+++
+++    if((-1 == player->getPlayerDirection()) && (player->getPosX() <= player->getLeftBound()))
+++    {
+++        lb->setPlatformPosX(lb->getPlatformPosX() + 5);
+++        lb->setStairPosX(lb->getStairPosX() + 5);
+++    }
+++}
+++
+++void SuperCopGame::physics()
++ {
+ -    if(0 == player->playerAction(lastKeyPress))
+ -        setLastKeyPress(0);
+++    if (player->getPosY() < lb->getPlatformPosY())
+ +    {
+-         if(isRightPressed)
+-             lastKeyPress = 1;
+-         else if(isUpPressed)
+-             lastKeyPress = 2;
+-         else if(isDownPressed)
+-             lastKeyPress = 3;
+-         else if(isLeftPressed)
+-             lastKeyPress = 4;
+++        if((player->getPosX() >= lb->getPlatformPosX()) && (player->getPosX() <= lb->getPlatformEnd()))
+++        {
+++            player->setCollided(true);
+++            player->setPosY(lb->getPlatformPosY() - 43);
+++        }
+ +        else
+-             lastKeyPress = 0;
+++        {
+++            player->setCollided(false);
+++            delPx = lb->getPlatformPosY() - player->getGround();
+++            speedYFinal = static_cast<int>(sqrt(2*gravity*delPx));
+++            fallTime = speedYFinal / gravity;
+++            player->setPosY(player->getGround() - 0.5*gravity*(fallTime * fallTime));
+++        }
+ +    }
+++
+++    if((player->getPosY() < player->getGround()) && (!player->isCollided()))
+++    {
+++        player->setCollided(false);
+++        delPx = player->getPosY() - player->getGround();
+++        speedYFinal = static_cast<int>(sqrt(2 * gravity * (player->getPosY() - player->getGround())));
+++        fallTime = speedYFinal / gravity;
+++        player->setPosY(player->getGround() - 0.5*gravity*(fallTime * fallTime));
+++    }
+++}
+++
+++int SuperCopGame::getPlatformX()
+++{
+++    return lb->getPlatformPosX();
+++}
+++
+++
+++void SuperCopGame::pollKey() //DO NOT MODIFY. Code Works now.
+++{
+++    //Checks if any of the keys are pressed.
+++    if(isDownPressed)
+++        lastKeyPress = 3;
+++    else if(isUpPressed)
+++        lastKeyPress = 2;
+++    else if(isRightPressed)
+++        lastKeyPress = 1;
+++    else if(isLeftPressed )
+++        lastKeyPress = 4;
+      else
+ -        player->playerAction(lastKeyPress);
+ +    {
+ +        //Checks if none of the keys are pressed before checking if some of the keys are pressed.
+ +        if(!isUpPressed && !isDownPressed && !isLeftPressed && !isRightPressed)
+-             lastKeyPress = lastKeyPress;
+-         else if(!isUpPressed && !isDownPressed && !isLeftPressed)
+-             lastKeyPress = 1;
+-         else if(!isUpPressed && !isLeftPressed && !isRightPressed)
+-             lastKeyPress = 2;
+-         else if(!isUpPressed && !isLeftPressed && !isRightPressed)
+-             lastKeyPress = 3;
+-         else if(!isUpPressed && !isDownPressed && !isRightPressed)
+-             lastKeyPress = 4;
+++        {
+++            if(3 == lastKeyPress && player->isRolling())
+++                lastKeyPress = 3;
+++            else if(2 == lastKeyPress && player->isJumping())
+++                lastKeyPress = 2;
+++            else if(1 == lastKeyPress && player->isMoveRight())
+++                lastKeyPress = 1;
+++            else if (4 == lastKeyPress && player->isMoveLeft())
+++                lastKeyPress = 4;
+++            else
+++                lastKeyPress = 0;
+++        }
+ +        else
+ +            lastKeyPress = 0;
+-      }
+- //     }
+++    }
+ +}
+ +
+  
+ +void SuperCopGame::updateField()
+ +{
+-     pollKey();
+ +    player->playerAction(lastKeyPress);
+++    obstacleMovement();
+++    physics();
+      this->update();
+  }
+  
+@@@ -148,10 -84,71 +205,83 @@@ void SuperCopGame::paintEvent(QPaintEve
+  {
+      QPainter painter(this);
+      player->drawPlayer(painter);
+ -    painter.drawPixmap(picX,picY,picWidth,picHeight,*robot);
+ -    picX-=5;
+++    lb->drawLevel(painter);
+ +
+ +    //For debugging purposes
+ +    QPen pen = QPen(Qt::red);
+ +    painter.setPen(pen);
+-     painter.drawText(10,10, QString("Frame: %1").arg(QString::number(player->getFrame())));
+-     painter.drawText(20,20, QString("LastKeyPress: %1").arg(QString::number(lastKeyPress)));
+- }
+++    painter.drawText(10, 10, QString("Frame: %1").arg(QString::number(player->getFrame())));
+++    painter.drawText(10, 20, QString("LastKeyPress: %1").arg(QString::number(lastKeyPress)));
+++
++     gamescore++;
+ -    if(picX==player->getPosX()){
+++    if(picX == player->getPosX())
+++    {
++         timer->stop();
++         QMessageBox mbox;
++         mbox.setText("Game Over");
++         mbox.exec();
++         ifstream scoreset;
++         scoreset.open("../SuperCop/highscores.txt");
++         int scores;
++ 
++         if(scoreset.is_open()){
++ 
+ -            scoreset>>scores;
+ -            int firstscore=scores;
+ -            scoreset>>scores;
+ -            int secondscore=scores;
+ -            scoreset>>scores;
+ -            int thirdscore=scores;
+ -            scoreset>>scores;
+ -            int fourthscore=scores;
+ -            scoreset>>scores;
+ -            int fifthscore=scores;
+++            scoreset >> scores;
+++            int firstscore = scores;
+++            scoreset >> scores;
+++            int secondscore = scores;
+++            scoreset >> scores;
+++            int thirdscore = scores;
+++            scoreset >> scores;
+++            int fourthscore = scores;
+++            scoreset >> scores;
+++            int fifthscore = scores;
++             scoreset.close();
++ 
+ -            if(firstscore<gamescore){
+ -                   fifthscore=fourthscore;
+ -                   fourthscore=thirdscore;
+ -                   thirdscore=secondscore;
+ -                   secondscore=firstscore;
+ -                   firstscore=gamescore;
+ -           //maybe add a window which declares "New High Score" in this case-time permitting
+++            if(firstscore < gamescore)
+++            {
+++                   fifthscore = fourthscore;
+++                   fourthscore = thirdscore;
+++                   thirdscore = secondscore;
+++                   secondscore = firstscore;
+++                   firstscore = gamescore;
+++            //maybe add a window which declares "New High Score" in this case-time permitting
++             }
+ -            else if(secondscore<gamescore){
+ -                   fifthscore=fourthscore;
+ -                   fourthscore=thirdscore;
+ -                   thirdscore=secondscore;
+ -                   secondscore=gamescore;
+++            else if(secondscore < gamescore)
+++            {
+++                   fifthscore = fourthscore;
+++                   fourthscore = thirdscore;
+++                   thirdscore = secondscore;
+++                   secondscore = gamescore;
++             }
+ -            else if(thirdscore<gamescore){
+ -                   fifthscore=fourthscore;
+ -                   fourthscore=thirdscore;
+ -                   thirdscore=gamescore;
+++            else if(thirdscore < gamescore)
+++            {
+++                   fifthscore = fourthscore;
+++                   fourthscore = thirdscore;
+++                   thirdscore = gamescore;
++             }
+ -            else if(fourthscore<gamescore){
+ -                   fifthscore=fourthscore;
+ -                   fourthscore=gamescore;
+++            else if(fourthscore < gamescore)
+++            {
+++                   fifthscore = fourthscore;
+++                   fourthscore = gamescore;
++             }
+ -            else if(fifthscore<gamescore){
+ -                   fifthscore=gamescore;
+++            else if(fifthscore<gamescore)
+++            {
+++                   fifthscore = gamescore;
++             }
++ 
++             ofstream setscores;
++             setscores.open("../SuperCop/highscores.txt");
++ 
+ -            setscores<<firstscore<<endl;
+ -            setscores<<secondscore<<endl;
+ -            setscores<<thirdscore<<endl;
+ -            setscores<<fourthscore<<endl;
+ -            setscores<<fifthscore<<endl;
+++            setscores << firstscore << endl;
+++            setscores << secondscore << endl;
+++            setscores << thirdscore << endl;
+++            setscores << fourthscore << endl;
+++            setscores << fifthscore << endl;
++ 
++             setscores.close();
++             }//resets high scores if new high score acheived
++ 
++          }
++     }
++ 
+diff --cc SuperCop/supercopgame.h
+index f9f51e8,47b587e..0000000
+--- a/SuperCop/supercopgame.h
++++ b/SuperCop/supercopgame.h
+@@@ -2,6 -2,6 +2,7 @@@
+  #define SUPERCOPGAME_H
+  
+  
+++#include "levelbase.h"
+  #include "player.h"
+  
+  #include <QWidget>
+@@@ -25,12 -27,14 +28,21 @@@ class SuperCopGame : public QWidge
+  private:
+      enum keyPressed {NONE = 0, RIGHT = 1, UP = 2, DOWN = 3, LEFT = 4};
+      Ui::SuperCopGame *ui;
+ -    QPixmap* robot;
++     int picX,picY;
++     int picHeight, picWidth;
+++
+++    int gravity, delPx;
+++    int speedYFinal, fallTime;
+ +
+      Player *player;
+++    LevelBase *lb;
+      QTimer *timer;
+ +    QTimer *keyTimer;
+      int lastKeyPress;
+++
+ +    bool isUpPressed, isDownPressed, isLeftPressed, isRightPressed;
++     QWidget* parent;
++     int gamescore;
+  
+  public:
+      void paintEvent(QPaintEvent *e);
+@@@ -38,8 -42,8 +50,14 @@@
+      ~SuperCopGame();
+  
+      void keyPressEvent(QKeyEvent *evt);
+ +    void keyReleaseEvent(QKeyEvent *evt);
+      void setLastKeyPress(int keyPress);
+++    void setPlatformX(int x);
+++    void obstacleMovement();
+++    void physics();
+++
+++    int getPlatformX();
++ 
+  signals:
+  
+  public slots:
