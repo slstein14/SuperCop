@@ -31,9 +31,6 @@ private:
     int picX,picY;
     int picHeight, picWidth;
 
-    int gravity, delPx;
-    int speedYFinal, fallTime;
-
     Player *player;
     LevelBase *lb;
     QTimer *timer;

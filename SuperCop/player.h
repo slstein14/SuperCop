@@ -20,7 +20,6 @@ private:
     bool collided;
     int posX, posY;
     int sizeX, sizeY;
-    double playerJumpSpeed, fallTime, gravity;
 
     int frame;
     int leftBound, rightBound;

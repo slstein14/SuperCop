@@ -42,7 +42,6 @@ SuperCopGame::SuperCopGame(QWidget *parent) :
     isRightPressed = false;
 
     lastKeyPress = 0;
-    gravity = 8; //pixels/s^2
 }
 
 
@@ -126,38 +125,103 @@ void SuperCopGame::obstacleMovement()
 
 void SuperCopGame::physics()
 {
-    if (player->getPosY() < lb->getPlatformPosY())
+    //Platform Collision Detection
+    if((player->getPosX() >= lb->getPlatformPosX()) && (player->getPosX() <= lb->getPlatformEnd()))
     {
-        if((player->getPosX() >= lb->getPlatformPosX()) && (player->getPosX() <= lb->getPlatformEnd()))
+        if(player->getPosY() < lb->getPlatformPosY())
         {
-            player->setCollided(true);
             player->setPosY(lb->getPlatformPosY() - 43);
+            player->setCollided(true);
         }
         else
         {
+
+            if(player->getPosY() < player->getGround())
+            {
+                player->setCollided(false);
+            }
+            else
+            {
+                player->setCollided(true);
+            }
+        }
+    }
+    else
+    {
+        if(player->getPosY() <= player->getGround())
+        {
             player->setCollided(false);
-            delPx = lb->getPlatformPosY() - player->getGround();
-            speedYFinal = static_cast<int>(sqrt(2*gravity*delPx));
-            fallTime = speedYFinal / gravity;
-            player->setPosY(player->getGround() - 0.5*gravity*(fallTime * fallTime));
+        }
+        else
+        {
+            player->setCollided(true);
         }
     }
 
-    if((player->getPosY() < player->getGround()) && (!player->isCollided()))
-    {
-        player->setCollided(false);
-        delPx = player->getPosY() - player->getGround();
-        speedYFinal = static_cast<int>(sqrt(2 * gravity * (player->getPosY() - player->getGround())));
-        fallTime = speedYFinal / gravity;
-        player->setPosY(player->getGround() - 0.5*gravity*(fallTime * fallTime));
-    }
+    //Stair Collision Detection
+//    if(player->getPosX() >= lb->getStep1PosX() && player->getPosX() < lb->getStep2PosX())
+//    {
+//        if(player->getPosY() < lb->getStep1PosY())
+//        {
+//            player->setPosY(lb->getStep1PosY());
+//            player->setCollided(true);
+//        }
+//        else
+//        {
+//            player->setPosY(player->getPosY());
+//            player->setCollided(true);
+//        }
+//    }
+//    else if(player->getPosX() >= lb->getStep2PosX() && player->getPosX() < lb->getStep3PosX())
+//    {
+//        if(player->getPosY() < lb->getStep2PosY())
+//        {
+//            player->setPosY(lb->getStep2PosY());
+//            player->setCollided(true);
+//        }
+//        else
+//        {
+//            player->setPosY(player->getPosY());
+//            player->setCollided(true);
+//        }
+//    }
+//    else if(player->getPosX() >= lb->getStep3PosX() && player->getPosX() < lb->getStep4PosX())
+//    {
+//        if(player->getPosY() < lb->getStep3PosY())
+//        {
+//            player->setPosY(lb->getStep3PosY());
+//            player->setCollided(true);
+//        }
+//        else
+//        {
+//            player->setPosY(player->getPosY());
+//            player->setCollided(true);
+//        }
+//    }
+//    else if(player->getPosX() >= lb->getStep4PosX() && player->getPosX() < lb->getStep4PosX() + 16)
+//    {
+//        if(player->getPosY() < lb->getStep4PosY())
+//        {
+//            player->setPosY(lb->getStep4PosY());
+//            player->setCollided(true);
+//        }
+//        else
+//        {
+//            player->setPosY(player->getPosY());
+//            player->setCollided(true);
+//        }
+//    }
+//    else
+//    {
+//        player->setPosX(player->getPosX());
+//        player->setCollided(true);
+//    }
 }
 
 int SuperCopGame::getPlatformX()
 {
     return lb->getPlatformPosX();
 }
-
 
 void SuperCopGame::pollKey() //DO NOT MODIFY. Code Works now.
 {
@@ -191,7 +255,6 @@ void SuperCopGame::pollKey() //DO NOT MODIFY. Code Works now.
     }
 }
 
-
 void SuperCopGame::updateField()
 {
     player->playerAction(lastKeyPress);
@@ -199,7 +262,6 @@ void SuperCopGame::updateField()
     physics();
     this->update();
 }
-
 
 void SuperCopGame::paintEvent(QPaintEvent *e)
 {

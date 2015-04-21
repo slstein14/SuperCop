@@ -22,7 +22,7 @@ LevelBase::LevelBase(QWidget *parent)
 
 LevelBase::~LevelBase()
 {
-
+    delete floor;
 }
 
 void LevelBase::drawLevel(QPainter &painter)
@@ -87,6 +87,46 @@ void LevelBase::setStairPosX(int x)
 int LevelBase::getStairPosX()
 {
     return stairPosX;
+}
+
+int LevelBase::getStep1PosX()
+{
+    return step1X;
+}
+
+int LevelBase::getStep2PosX()
+{
+    return step2X;
+}
+
+int LevelBase::getStep3PosX()
+{
+    return step3X;
+}
+
+int LevelBase::getStep4PosX()
+{
+    return step4X;
+}
+
+int LevelBase::getStep1PosY()
+{
+    return step1Y;
+}
+
+int LevelBase::getStep2PosY()
+{
+    return step2Y;
+}
+
+int LevelBase::getStep3PosY()
+{
+    return step3Y;
+}
+
+int LevelBase::getStep4PosY()
+{
+    return step4Y;
 }
 
 int LevelBase::getPlatformPosX()
