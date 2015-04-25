@@ -25,7 +25,7 @@ HighScores::HighScores(QWidget *parent) :
        scoreset>>scores;
        ui->Score5->setText(QString::number(scores));
     }//reads current high scores
-scoreset.close();
+    scoreset.close();
 
 }//Runs High Score Window
 
