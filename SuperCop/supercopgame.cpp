@@ -88,6 +88,20 @@ void SuperCopGame::keyPressEvent(QKeyEvent *evt)
     case Qt::Key_Left:
         isLeftPressed = true;
         break;
+    case Qt::Key_Escape:
+    {
+        QMessageBox pbox;
+        pbox.setText("Paused");
+        pbox.exec();
+        break;
+    }
+    case Qt::Key_P:
+    {
+        QMessageBox pbox;
+        pbox.setText("Paused");
+        pbox.exec();
+        break;
+    }
     default:
         break;
     }
