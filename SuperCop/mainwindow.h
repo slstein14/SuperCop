@@ -33,6 +33,10 @@ private slots:
 
     void on_Easy_1P_triggered();
 
+    void on_Medium_1P_triggered();
+
+    void on_Hard_1P_triggered();
+
 private:
     Ui::MainWindow *ui;
     ContactUs* contact;

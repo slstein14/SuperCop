@@ -8,7 +8,7 @@ Donut::Donut(QWidget *parent)
 {
     windowwidth=parent->width();
     posX = (620);
-    posY = parent->height() - 140;
+    posY = parent->height() - 160;
     sizeX = 20;
     sizeY = 20;
     donut = new QPixmap("../SuperCop/Images/Donut/Donut.png");

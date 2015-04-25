@@ -84,10 +84,16 @@
    <property name="text">
     <string>Medium</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
+   </property>
   </action>
   <action name="Hard_1P">
    <property name="text">
     <string>Hard</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+3</string>
    </property>
   </action>
   <action name="Easy_2P">

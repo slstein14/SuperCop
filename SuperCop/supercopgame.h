@@ -54,6 +54,7 @@ private:
     vector<int>donutspawn;
     vector<int>enemyspawn;
     Donut *levelend;
+    int movespeed;
 
 public:
     void paintEvent(QPaintEvent *e);
@@ -66,10 +67,11 @@ public:
     void setPlatformX(int x);
     void obstacleMovement();
     void physics();
-    void setVecs(QString level);
+    void setVecs(QString level, int end);
     void setHighScores();
 
     int getPlatformX();
+    void setMoveSpeed(int spd);
 
 signals:
 

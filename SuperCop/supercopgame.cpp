@@ -147,32 +147,38 @@ int SuperCopGame::getPlatformX()
 
 void SuperCopGame::obstacleMovement()
 {
-    if((1 == player->getPlayerDirection()) && (player->getPosX() + player->getSizeX()) >= player->getRightBound())
+    if((1 == player->getPlayerDirection()) && (player->getPosX() + player->getSizeX()) >= player->getRightBound()&&levelend->getPosX()>=0)
     {
-        lb->setPlatformPosX(lb->getPlatformPosX() - 5);
-        lb->setStairPosX(lb->getStairPosX() - 5);
+        lb->setPlatformPosX(lb->getPlatformPosX() - movespeed);
+        lb->setStairPosX(lb->getStairPosX() - movespeed);
 
         for(unsigned int i=0;i<donuts.size();i++){
             if(true==(*(donuts.at(i))).getActive()){
-                (*(donuts.at(i))).setPosX((*(donuts.at(i))).getPosX()-5);
+                (*(donuts.at(i))).setPosX((*(donuts.at(i))).getPosX()-movespeed);
             }
         }
         location++;
-        levelend->setPosX(levelend->getPosX()-5);
+        levelend->setPosX(levelend->getPosX()-movespeed);
     }
 
     if((-1 == player->getPlayerDirection()) && (player->getPosX() <= player->getLeftBound())&&0<location)
     {
-        lb->setPlatformPosX(lb->getPlatformPosX() + 5);
-        lb->setStairPosX(lb->getStairPosX() + 5);
+        lb->setPlatformPosX(lb->getPlatformPosX() + movespeed);
+        lb->setStairPosX(lb->getStairPosX() + movespeed);
 
         for(unsigned int i=0;i<donuts.size();i++){
             if(true==(*(donuts.at(i))).getActive()){
-                (*(donuts.at(i))).setPosX((*(donuts.at(i))).getPosX()+5);
+                (*(donuts.at(i))).setPosX((*(donuts.at(i))).getPosX()+movespeed);
+            }
+
+        }
+        for(unsigned int i=0;i<enemies.size();i++){
+            if(true==(*(enemies.at(i))).getActive()){
+                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX()+3);
             }
         }
         location--;
-        levelend->setPosX(levelend->getPosX()+5);
+        levelend->setPosX(levelend->getPosX()+movespeed);
     }
 }//Scrolls objects across the screen as necessary
 
@@ -324,7 +330,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     painter.drawText(10, 20, QString("LastKeyPress: %1").arg(QString::number(lastKeyPress)));
     painter.drawText(10, 30, QString("location: %1").arg(QString::number(location)));
 
-    QRect enemyrect, playerrect, donutrect;
+    QRect enemyrect, playerrect, donutrect, levelendrect;
     playerrect = QRect(player->getPosX(),player->getPosY(),player->getSizeX(),player->getSizeY());
 
 
@@ -337,10 +343,10 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
             (*(donuts.at(i))).setActive(true);
         }//spawns a donut at each read location
 
-
         if(true==(*(donuts.at(i))).getActive()){
             (*(donuts.at(i))).drawDonut(painter);
-        }
+        }//Controls whether donut is painted
+
         if(true==(*(donuts.at(i))).getActive()&&playerrect.intersects(donutrect)){
             (*(donuts.at(i))).setActive(false);
             (*(donuts.at(i))).setPosX(-10000);//Donuts may technically be reactivated by going backward, but the player cannot go back past 0, and donuts will spawn waaaay back.
@@ -360,10 +366,9 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
         }//spawns an enemy at each read location
 
         if(true==(*(enemies.at(i))).getActive()){
-            (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX()-5);
+            (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX()-movespeed-3);
             (*(enemies.at(i))).drawEnemy(painter);
-        }//makes enemy not spawn immediately-and will allow for enemies to despawn later maybe?
-        //enemy moves based on time, not player-basic AI
+        }//enemy moves based on time
 
         if(playerrect.intersects(enemyrect)&&true==player->isJumping()){
             (*(enemies.at(i))).setActive(false);
@@ -372,7 +377,6 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
 
         if(playerrect.intersects(enemyrect)&&false==player->isJumping())
         {
-
              (*(enemies.at(i))).setPosY((*(enemies.at(i))).getPosY()-1);
              timer->stop();
              QMessageBox mbox;
@@ -380,13 +384,13 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
              mbox.exec();
              this->setHighScores();
              this->close();
-
         }//Handles game-ending collisions
     }//Handles all cases of enemy objects.
 
     levelend->drawDonut(painter);
+    levelendrect = QRect(levelend->getPosX(),levelend->getPosY(),levelend->getSizeX(),levelend->getSizeY());
 
-    if( levelend->getPosX() <= player->getPosX()&& levelend->getPosX()+45>=player->getPosX()&& levelend->getPosY()==player->getPosY()){
+    if(playerrect.intersects(levelendrect)){
         gamescore+=100;
         timer->stop();
         player->setPosX(player->getPosX()+1);
@@ -398,7 +402,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     }//Handles game-winning
 }//Paints objects and checks for collisions
 
-void SuperCopGame::setVecs(QString level){
+void SuperCopGame::setVecs(QString level, int end){
 
     QString enemyfile("../SuperCop/" + level + "/enemy.txt");
     QString donutfile("../SuperCop/" + level + "/donut.txt");
@@ -438,13 +442,16 @@ void SuperCopGame::setVecs(QString level){
     levelend = new Donut(this);
     levelend->setSizeX(40);
     levelend->setSizeY(40);
-    levelend->setPosX(2500);
+    levelend->setPosX(end);
+    levelend->setPosY(this->height()-200);
 }//Initializes vectors for Level 1
 
 void SuperCopGame::setHighScores()
 {
+    int scorefile = movespeed/5;
+    QString filename = "../SuperCop/highscores"+QString::number(scorefile)+".txt";
     ifstream scoreset;
-    scoreset.open("../SuperCop/highscores.txt");
+    scoreset.open(filename.toStdString().c_str());
     int scores;
 
     if(scoreset.is_open()){
@@ -497,7 +504,7 @@ void SuperCopGame::setHighScores()
        }
 
        ofstream setscores;
-       setscores.open("../SuperCop/highscores.txt");
+       setscores.open(filename.toStdString().c_str());
 
        setscores << firstscore << endl;
        setscores << secondscore << endl;
@@ -509,3 +516,7 @@ void SuperCopGame::setHighScores()
        }
 }//resets high scores if new high score acheived
 
+void SuperCopGame::setMoveSpeed(int spd)
+{
+    movespeed=spd;
+}
