@@ -1,3 +1,5 @@
+//Alex Portolese and Sam Stein
+//This file contains the declarations for the Functional game.
 #ifndef SUPERCOPGAME_H
 #define SUPERCOPGAME_H
 
@@ -15,6 +17,11 @@
 #include <QKeyEvent>
 #include <QPixmap>
 #include <QMessageBox>
+
+#include <enemy.h>
+#include <donut.h>
+#include <vector>
+using namespace std;
 
 namespace Ui {
 class SuperCopGame;
@@ -41,6 +48,14 @@ private:
     QWidget* parent;
     int gamescore;
 
+    int location;
+    vector<Donut*>donuts;
+    vector<Enemy*>enemies;
+    vector<int>donutspawn;
+    vector<int>enemyspawn;
+    Donut *levelend;
+    int movespeed;
+
 public:
     void paintEvent(QPaintEvent *e);
     explicit SuperCopGame(QWidget *parent = 0);
@@ -52,8 +67,11 @@ public:
     void setPlatformX(int x);
     void obstacleMovement();
     void physics();
+    void setVecs(QString level, int end);
+    void setHighScores();
 
     int getPlatformX();
+    void setMoveSpeed(int spd);
 
 signals:
 

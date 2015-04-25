@@ -55,6 +55,9 @@ void MainWindow::on_actionHigh_Scores_triggered()
 {
     if(hScore==NULL){
         hScore = new HighScores();
+    }else{
+        delete hScore;
+        hScore = new HighScores();
     }
     hScore->show();
 }//Opens an instance of the High Score window
@@ -64,6 +67,46 @@ void MainWindow::on_Easy_1P_triggered()
     if(scg == NULL)
     {
         scg = new SuperCopGame();
+        scg->setVecs("level1",6500);
+        scg->setMoveSpeed(5);
+    }else{
+        delete scg;
+        scg = new SuperCopGame();
+        scg->setVecs("level1",6500);
+        scg->setMoveSpeed(5);
     }
     scg->show();
-}
+}//Creates a 1 player game on easy
+
+void MainWindow::on_Medium_1P_triggered()
+{
+    if(scg == NULL)
+    {
+        scg = new SuperCopGame();
+        scg->setVecs("level1",6500);
+        scg->setMoveSpeed(10);
+    }else{
+        delete scg;
+        scg = new SuperCopGame();
+        scg->setVecs("level1",6500);
+        scg->setMoveSpeed(10);
+    }
+    scg->show();
+}//Creates a 1 player game on medium
+
+void MainWindow::on_Hard_1P_triggered()
+{
+    if(scg == NULL)
+    {
+        scg = new SuperCopGame();
+        scg->setVecs("level1",6500);
+        scg->setMoveSpeed(15);
+    }else{
+        delete scg;
+        scg = new SuperCopGame();
+        scg->setVecs("level1",6500);
+        scg->setMoveSpeed(15);
+    }
+    scg->show();
+}//Creates a 1 player game on hard
+

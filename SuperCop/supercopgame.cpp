@@ -1,3 +1,5 @@
+//Alex Portolese and Sam Stein
+//This file contains the coding to make the classes interact in the game.
 #include "supercopgame.h"
 #include "player.h"
 #include <QGraphicsScene>
@@ -9,8 +11,9 @@
 #include <cstdlib>
 #include <fstream>
 using namespace std;
-
-
+#include <vector>
+#include <donut.h>
+#include <QRect>
 
 SuperCopGame::SuperCopGame(QWidget *parent) :
     QWidget(parent)
@@ -42,7 +45,12 @@ SuperCopGame::SuperCopGame(QWidget *parent) :
     isRightPressed = false;
 
     lastKeyPress = 0;
-}
+
+    gamescore=0;
+
+    location=0;
+
+}//Initializes game variables
 
 
 SuperCopGame::~SuperCopGame()
@@ -50,7 +58,18 @@ SuperCopGame::~SuperCopGame()
     delete timer;
     delete player;
     delete keyTimer;
-}
+    for(unsigned int i=0;i<enemyspawn.size();i++){
+        delete enemies.at(i);
+    }
+    enemies.clear();
+    enemyspawn.clear();
+    for(unsigned int i=0;i<donutspawn.size();i++){
+        delete donuts.at(i);
+    }
+    donuts.clear();
+    donutspawn.clear();
+    delete levelend;
+}//Destructor
 
 
 void SuperCopGame::keyPressEvent(QKeyEvent *evt)
@@ -62,7 +81,6 @@ void SuperCopGame::keyPressEvent(QKeyEvent *evt)
         break;
     case Qt::Key_Down:
         isDownPressed = true;
-//        gamescore++;
         break;
     case Qt::Key_Up:
         isUpPressed = true;
@@ -70,10 +88,24 @@ void SuperCopGame::keyPressEvent(QKeyEvent *evt)
     case Qt::Key_Left:
         isLeftPressed = true;
         break;
+    case Qt::Key_Escape:
+    {
+        QMessageBox pbox;
+        pbox.setText("Paused");
+        pbox.exec();
+        break;
+    }
+    case Qt::Key_P:
+    {
+        QMessageBox pbox;
+        pbox.setText("Paused");
+        pbox.exec();
+        break;
+    }
     default:
         break;
     }
-}
+}//Reads user key presses
 
 
 void SuperCopGame::keyReleaseEvent(QKeyEvent *evt)
@@ -95,33 +127,60 @@ void SuperCopGame::keyReleaseEvent(QKeyEvent *evt)
     default:
         break;
     }
-}
+}//Reads user Key Releases
 
 
 void SuperCopGame::setLastKeyPress(int key)
 {
     this->lastKeyPress = key;
-}
+}//Sets key based on key presses
 
 void SuperCopGame::setPlatformX(int x)
 {
     lb->setPlatformPosX(x);
-}
+}//Sets the location of the platform
+
+int SuperCopGame::getPlatformX()
+{
+    return lb->getPlatformPosX();
+}//Gets platform location
 
 void SuperCopGame::obstacleMovement()
 {
-    if((1 == player->getPlayerDirection()) && (player->getPosX() + player->getSizeX()) >= player->getRightBound())
+    if((1 == player->getPlayerDirection()) && (player->getPosX() + player->getSizeX()) >= player->getRightBound()&&levelend->getPosX()>=0)
     {
-        lb->setPlatformPosX(lb->getPlatformPosX() - 5);
-        lb->setStairPosX(lb->getStairPosX() - 5);
+        lb->setPlatformPosX(lb->getPlatformPosX() - movespeed);
+        lb->setStairPosX(lb->getStairPosX() - movespeed);
+
+        for(unsigned int i=0;i<donuts.size();i++){
+            if(true==(*(donuts.at(i))).getActive()){
+                (*(donuts.at(i))).setPosX((*(donuts.at(i))).getPosX()-movespeed);
+            }
+        }
+        location++;
+        levelend->setPosX(levelend->getPosX()-movespeed);
     }
 
-    if((-1 == player->getPlayerDirection()) && (player->getPosX() <= player->getLeftBound()))
+    if((-1 == player->getPlayerDirection()) && (player->getPosX() <= player->getLeftBound())&&0<location)
     {
-        lb->setPlatformPosX(lb->getPlatformPosX() + 5);
-        lb->setStairPosX(lb->getStairPosX() + 5);
+        lb->setPlatformPosX(lb->getPlatformPosX() + movespeed);
+        lb->setStairPosX(lb->getStairPosX() + movespeed);
+
+        for(unsigned int i=0;i<donuts.size();i++){
+            if(true==(*(donuts.at(i))).getActive()){
+                (*(donuts.at(i))).setPosX((*(donuts.at(i))).getPosX()+movespeed);
+            }
+
+        }
+        for(unsigned int i=0;i<enemies.size();i++){
+            if(true==(*(enemies.at(i))).getActive()){
+                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX()+3);
+            }
+        }
+        location--;
+        levelend->setPosX(levelend->getPosX()+movespeed);
     }
-}
+}//Scrolls objects across the screen as necessary
 
 void SuperCopGame::physics()
 {
@@ -146,6 +205,7 @@ void SuperCopGame::physics()
             }
         }
     }
+
     else
     {
         if(player->getPosY() <= player->getGround())
@@ -157,71 +217,65 @@ void SuperCopGame::physics()
             player->setCollided(true);
         }
     }
-
-    //Stair Collision Detection
-//    if(player->getPosX() >= lb->getStep1PosX() && player->getPosX() < lb->getStep2PosX())
-//    {
-//        if(player->getPosY() < lb->getStep1PosY())
-//        {
-//            player->setPosY(lb->getStep1PosY());
-//            player->setCollided(true);
-//        }
-//        else
-//        {
-//            player->setPosY(player->getPosY());
-//            player->setCollided(true);
-//        }
-//    }
-//    else if(player->getPosX() >= lb->getStep2PosX() && player->getPosX() < lb->getStep3PosX())
-//    {
-//        if(player->getPosY() < lb->getStep2PosY())
-//        {
-//            player->setPosY(lb->getStep2PosY());
-//            player->setCollided(true);
-//        }
-//        else
-//        {
-//            player->setPosY(player->getPosY());
-//            player->setCollided(true);
-//        }
-//    }
-//    else if(player->getPosX() >= lb->getStep3PosX() && player->getPosX() < lb->getStep4PosX())
-//    {
-//        if(player->getPosY() < lb->getStep3PosY())
-//        {
-//            player->setPosY(lb->getStep3PosY());
-//            player->setCollided(true);
-//        }
-//        else
-//        {
-//            player->setPosY(player->getPosY());
-//            player->setCollided(true);
-//        }
-//    }
-//    else if(player->getPosX() >= lb->getStep4PosX() && player->getPosX() < lb->getStep4PosX() + 16)
-//    {
-//        if(player->getPosY() < lb->getStep4PosY())
-//        {
-//            player->setPosY(lb->getStep4PosY());
-//            player->setCollided(true);
-//        }
-//        else
-//        {
-//            player->setPosY(player->getPosY());
-//            player->setCollided(true);
-//        }
-//    }
-//    else
-//    {
-//        player->setPosX(player->getPosX());
-//        player->setCollided(true);
-//    }
-}
-
-int SuperCopGame::getPlatformX()
-{
-    return lb->getPlatformPosX();
-}
+        //Stair Collision Detection
+        //    if(player->getPosX() >= lb->getStep1PosX() && player->getPosX() < lb->getStep2PosX())
+        //    {
+        //        if(player->getPosY() < lb->getStep1PosY())
+        //        {
+        //            player->setPosY(lb->getStep1PosY());
+        //            player->setCollided(true);
+        //        }
+        //        else
+        //        {
+        //            player->setPosY(player->getPosY());
+        //            player->setCollided(true);
+        //        }
+        //    }
+        //    else if(player->getPosX() >= lb->getStep2PosX() && player->getPosX() < lb->getStep3PosX())
+        //    {
+        //        if(player->getPosY() < lb->getStep2PosY())
+        //        {
+        //            player->setPosY(lb->getStep2PosY());
+        //            player->setCollided(true);
+        //        }
+        //        else
+        //        {
+        //            player->setPosY(player->getPosY());
+        //            player->setCollided(true);
+        //        }
+        //    }
+        //    else if(player->getPosX() >= lb->getStep3PosX() && player->getPosX() < lb->getStep4PosX())
+        //    {
+        //        if(player->getPosY() < lb->getStep3PosY())
+        //        {
+        //            player->setPosY(lb->getStep3PosY());
+        //            player->setCollided(true);
+        //        }
+        //        else
+        //        {
+        //            player->setPosY(player->getPosY());
+        //            player->setCollided(true);
+        //        }
+        //    }
+        //    else if(player->getPosX() >= lb->getStep4PosX() && player->getPosX() < lb->getStep4PosX() + 16)
+        //    {
+        //        if(player->getPosY() < lb->getStep4PosY())
+        //        {
+        //            player->setPosY(lb->getStep4PosY());
+        //            player->setCollided(true);
+        //        }
+        //        else
+        //        {
+        //            player->setPosY(player->getPosY());
+        //            player->setCollided(true);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        player->setPosX(player->getPosX());
+        //        player->setCollided(true);
+    //    }
+}//Handles Collisions
 
 void SuperCopGame::pollKey() //DO NOT MODIFY. Code Works now.
 {
@@ -253,7 +307,7 @@ void SuperCopGame::pollKey() //DO NOT MODIFY. Code Works now.
         else
             lastKeyPress = 0;
     }
-}
+}//Checks which key is being pressed, stopps animation loops
 
 void SuperCopGame::updateField()
 {
@@ -261,7 +315,7 @@ void SuperCopGame::updateField()
     obstacleMovement();
     physics();
     this->update();
-}
+}//Updates the painted locations of objects based on a timer
 
 void SuperCopGame::paintEvent(QPaintEvent *e)
 {
@@ -274,76 +328,195 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     painter.setPen(pen);
     painter.drawText(10, 10, QString("Frame: %1").arg(QString::number(player->getFrame())));
     painter.drawText(10, 20, QString("LastKeyPress: %1").arg(QString::number(lastKeyPress)));
+    painter.drawText(10, 30, QString("location: %1").arg(QString::number(location)));
 
-    gamescore++;
-    if(picX == player->getPosX())
-    {
+    QRect enemyrect, playerrect, donutrect, levelendrect;
+    playerrect = QRect(player->getPosX(),player->getPosY(),player->getSizeX(),player->getSizeY());
+
+
+    for(unsigned int i=0;i<donuts.size();i++){
+
+        donutrect = QRect((*(donuts.at(i))).getPosX(),(*(donuts.at(i))).getPosY(),(*(donuts.at(i))).getSizeX(),(*(donuts.at(i))).getSizeY());
+
+        if(donutspawn.at(i)==location)
+        {
+            (*(donuts.at(i))).setActive(true);
+        }//spawns a donut at each read location
+
+        if(true==(*(donuts.at(i))).getActive()){
+            (*(donuts.at(i))).drawDonut(painter);
+        }//Controls whether donut is painted
+
+        if(true==(*(donuts.at(i))).getActive()&&playerrect.intersects(donutrect)){
+            (*(donuts.at(i))).setActive(false);
+            (*(donuts.at(i))).setPosX(-10000);//Donuts may technically be reactivated by going backward, but the player cannot go back past 0, and donuts will spawn waaaay back.
+            gamescore+=10;
+        }//handles collisions with donut
+
+
+    }//Handles all cases of donut objects.
+
+    for(unsigned int i=0;i<enemies.size();i++){
+
+        enemyrect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
+
+        if(enemyspawn.at(i)==location)
+        {
+            (*(enemies.at(i))).setActive(true);
+        }//spawns an enemy at each read location
+
+        if(true==(*(enemies.at(i))).getActive()){
+            (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX()-movespeed-3);
+            (*(enemies.at(i))).drawEnemy(painter);
+        }//enemy moves based on time
+
+        if(playerrect.intersects(enemyrect)&&true==player->isJumping()){
+            (*(enemies.at(i))).setActive(false);
+            (*(enemies.at(i))).setPosX(-100);
+        }//Kills enemy if you jump on it
+
+        if(playerrect.intersects(enemyrect)&&false==player->isJumping())
+        {
+             (*(enemies.at(i))).setPosY((*(enemies.at(i))).getPosY()-1);
+             timer->stop();
+             QMessageBox mbox;
+             mbox.setText("Game Over");
+             mbox.exec();
+             this->setHighScores();
+             this->close();
+        }//Handles game-ending collisions
+    }//Handles all cases of enemy objects.
+
+    levelend->drawDonut(painter);
+    levelendrect = QRect(levelend->getPosX(),levelend->getPosY(),levelend->getSizeX(),levelend->getSizeY());
+
+    if(playerrect.intersects(levelendrect)){
+        gamescore+=100;
         timer->stop();
+        player->setPosX(player->getPosX()+1);
         QMessageBox mbox;
-        mbox.setText("Game Over");
+        mbox.setText("Level Beaten");
         mbox.exec();
-        ifstream scoreset;
-        scoreset.open("../SuperCop/highscores.txt");
-        int scores;
+        this->setHighScores();
+        this->close();
+    }//Handles game-winning
+}//Paints objects and checks for collisions
 
-        if(scoreset.is_open()){
+void SuperCopGame::setVecs(QString level, int end){
 
-            scoreset >> scores;
-            int firstscore = scores;
-            scoreset >> scores;
-            int secondscore = scores;
-            scoreset >> scores;
-            int thirdscore = scores;
-            scoreset >> scores;
-            int fourthscore = scores;
-            scoreset >> scores;
-            int fifthscore = scores;
-            scoreset.close();
+    QString enemyfile("../SuperCop/" + level + "/enemy.txt");
+    QString donutfile("../SuperCop/" + level + "/donut.txt");
 
-            if(firstscore < gamescore)
-            {
-                   fifthscore = fourthscore;
-                   fourthscore = thirdscore;
-                   thirdscore = secondscore;
-                   secondscore = firstscore;
-                   firstscore = gamescore;
-            //maybe add a window which declares "New High Score" in this case-time permitting
-            }
-            else if(secondscore < gamescore)
-            {
-                   fifthscore = fourthscore;
-                   fourthscore = thirdscore;
-                   thirdscore = secondscore;
-                   secondscore = gamescore;
-            }
-            else if(thirdscore < gamescore)
-            {
-                   fifthscore = fourthscore;
-                   fourthscore = thirdscore;
-                   thirdscore = gamescore;
-            }
-            else if(fourthscore < gamescore)
-            {
-                   fifthscore = fourthscore;
-                   fourthscore = gamescore;
-            }
-            else if(fifthscore<gamescore)
-            {
-                   fifthscore = gamescore;
-            }
+    ifstream enemyread;
+    enemyread.open(enemyfile.toStdString().c_str());
+    int enemynum;
+    if(enemyread.is_open()){
+        while(enemyread>>enemynum){
+            enemyspawn.push_back(enemynum);
+        }
+    }
+    enemyread.close();
 
-            ofstream setscores;
-            setscores.open("../SuperCop/highscores.txt");
-
-            setscores << firstscore << endl;
-            setscores << secondscore << endl;
-            setscores << thirdscore << endl;
-            setscores << fourthscore << endl;
-            setscores << fifthscore << endl;
-
-            setscores.close();
-            }//resets high scores if new high score acheived
-
-         }
+    for(unsigned int i=0;i<enemyspawn.size();i++){
+        Enemy *enemy;
+        enemy = new Enemy(this);
+        enemies.push_back(enemy);
     }
 
+    ifstream donutread;
+    donutread.open(donutfile.toStdString().c_str());
+    int donutnum;
+    if(donutread.is_open()){
+        while(donutread>>donutnum){
+            donutspawn.push_back(donutnum);
+        }
+    }
+    donutread.close();
+
+    for(unsigned int i=0;i<donutspawn.size();i++){
+        Donut *donut;
+        donut= new Donut(this);
+        donuts.push_back(donut);
+    }
+
+    levelend = new Donut(this);
+    levelend->setSizeX(40);
+    levelend->setSizeY(40);
+    levelend->setPosX(end);
+    levelend->setPosY(this->height()-200);
+}//Initializes vectors for Level 1
+
+void SuperCopGame::setHighScores()
+{
+    int scorefile = movespeed/5;
+    QString filename = "../SuperCop/highscores"+QString::number(scorefile)+".txt";
+    ifstream scoreset;
+    scoreset.open(filename.toStdString().c_str());
+    int scores;
+
+    if(scoreset.is_open()){
+
+       scoreset >> scores;
+       int firstscore = scores;
+       scoreset >> scores;
+       int secondscore = scores;
+       scoreset >> scores;
+       int thirdscore = scores;
+       scoreset >> scores;
+       int fourthscore = scores;
+       scoreset >> scores;
+       int fifthscore = scores;
+       scoreset.close();
+
+       if(firstscore < gamescore)
+       {
+             fifthscore = fourthscore;
+             fourthscore = thirdscore;
+             thirdscore = secondscore;
+             secondscore = firstscore;
+             firstscore = gamescore;
+
+             QMessageBox sbox;
+             sbox.setText("New High Score: "+ QString::number(gamescore));
+             sbox.exec();
+       }
+       else if(secondscore < gamescore)
+       {
+              fifthscore = fourthscore;
+              fourthscore = thirdscore;
+              thirdscore = secondscore;
+              secondscore = gamescore;
+       }
+       else if(thirdscore < gamescore)
+       {
+              fifthscore = fourthscore;
+              fourthscore = thirdscore;
+              thirdscore = gamescore;
+       }
+       else if(fourthscore < gamescore)
+       {
+              fifthscore = fourthscore;
+              fourthscore = gamescore;
+       }
+      else if(fifthscore<gamescore)
+       {
+              fifthscore = gamescore;
+       }
+
+       ofstream setscores;
+       setscores.open(filename.toStdString().c_str());
+
+       setscores << firstscore << endl;
+       setscores << secondscore << endl;
+       setscores << thirdscore << endl;
+       setscores << fourthscore << endl;
+       setscores << fifthscore << endl;
+
+       setscores.close();
+       }
+}//resets high scores if new high score acheived
+
+void SuperCopGame::setMoveSpeed(int spd)
+{
+    movespeed=spd;
+}
