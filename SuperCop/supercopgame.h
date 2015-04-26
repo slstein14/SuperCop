@@ -66,6 +66,9 @@ private:
     vector<Enemy*>enemies;
     vector<int>donutspawn;
     vector<int>enemyspawn;
+    vector<int>wallSpawn;
+    vector<int>platSpawn;
+
     Donut *levelEnd;
     int moveSpeed;
 

@@ -11,9 +11,9 @@ Wall::Wall(QWidget *parent)
     picX = 32;
     picY = 50;
 
-    firePicX = 32;
+    firePicX = 30;
     firePicY = 21;
-    firePosX = wallPosX;
+    firePosX = wallPosX + 1;
     firePosY = wallPosY - 21;
 
     wallState = 0;

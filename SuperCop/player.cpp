@@ -8,7 +8,7 @@
 
 Player::Player(QWidget *parent)
 {
-    posX = (parent->width() / 6) + 20;
+    posX = 130; //(parent->width() / 5) + 10;
     posY = parent->height() - 140;
     sizeX = 25;
     sizeY = 43;
@@ -18,7 +18,7 @@ Player::Player(QWidget *parent)
     playerDirection = 1;
 
     leftBound = parent->width() / 5;
-    rightBound = parent->width() - (parent->width() / 3);
+    rightBound = parent->width() - (parent->width() / 5);
     ground = parent->height() - 140;
 
     rolling = false;
@@ -30,6 +30,7 @@ Player::Player(QWidget *parent)
     playerOnPlatform = false;
     onGround = true;
     upPressed = false;
+    wallCollided = false;
 
 }//initializes the player variables
 
@@ -61,14 +62,17 @@ void Player::playerScreenPos(QWidget *w = 0)
 {
     //Check where player is on screen. If within a predefined rect, do not scroll screen.
     //If on edge of rect, move camera in direction player is running
-    if(1 == lastActionPressed && ( this->posX + 25 < rightBound))
+    if(1 == lastActionPressed && (this->posX + 25 < rightBound) && !wallCollided)
     {
-        this->setPosX(this->getPosX() + 10);
+        this->setPosX(this->getPosX() + 5);
     }
-
-    if (4 == lastActionPressed && (this->posX > leftBound))
+    else if(4 == lastActionPressed && (this->posX > leftBound) && !wallCollided)
     {
-        this->setPosX(this->getPosX() - 10);
+        this->setPosX(this->getPosX() - 5);
+    }
+    else
+    {
+        this->setPosX(this->getPosX());
     }
 }//Controls whether the screen moves or the player does
 
@@ -176,7 +180,7 @@ void Player::roll()
             switch(playerDirection)
             {
             case WEST:
-                if(this->getPosX() - 8 >= leftBound)
+                if((this->getPosX() - 8 >= leftBound) && !this->isWallCollided())
                     this->setPosX(this->getPosX() - 8);
                 else
                     this->setPosX(this->getPosX());
@@ -185,7 +189,7 @@ void Player::roll()
                 changeImage(imagePath);
                 break;
             case EAST:
-                if(this->getPosX() + 33 < rightBound)
+                if((this->getPosX() + 33 < rightBound) && !this->isWallCollided())
                     this->setPosX(this->getPosX() + 8);
                 else
                     this->setPosX(this->getPosX());
@@ -202,7 +206,7 @@ void Player::roll()
             switch(playerDirection)
             {
             case WEST:
-                if(this->getPosX() - 3 > leftBound)
+                if((this->getPosX() - 3 > leftBound) && !this->isWallCollided())
                     this->setPosX(this->getPosX() - 3);
                 else
                     this->setPosX(this->getPosX());
@@ -211,7 +215,7 @@ void Player::roll()
                 changeImage(imagePath);
                 break;
             case EAST:
-                if(this->getPosX() + 28 < rightBound)
+                if((this->getPosX() + 28 < rightBound) && !this->isWallCollided())
                     this->setPosX(this->getPosX() + 3);
                 else
                     this->setPosX(this->getPosX());
@@ -401,6 +405,11 @@ bool Player::isOnPlatform()
 bool Player::isOnWall()
 {
     return playerOnWall;
+}
+
+bool Player::isWallCollided()
+{
+    return wallCollided;
 }//Accessor
 
 void Player::setPosX(int x)
@@ -446,6 +455,11 @@ void Player::setOnWall(bool onWall)
 void Player::setOnPlatform(bool onPlat)
 {
     this->playerOnPlatform = onPlat;
+}
+
+void Player::setWallCollided(bool wallCollided)
+{
+    this->wallCollided = wallCollided;
 }//Accessor
 
 int Player::getPosX()
