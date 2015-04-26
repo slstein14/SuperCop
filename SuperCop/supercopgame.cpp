@@ -101,20 +101,6 @@ void SuperCopGame::keyPressEvent(QKeyEvent *evt)
         pbox->setText("Paused");
         pbox->exec();
         break;
-=======
-    {
-        QMessageBox pbox;
-        pbox.setText("Paused");
-        pbox.exec();
-        break;
-    }
-    case Qt::Key_P:
-    {
-        QMessageBox pbox;
-        pbox.setText("Paused");
-        pbox.exec();
-        break;
-    }
     default:
         break;
     }
@@ -155,7 +141,7 @@ void SuperCopGame::setPlatformX(int x)
 
 void SuperCopGame::obstacleMovement()
 {
-    if((1 == player->getPlayerDirection()) && (player->getPosX() + player->getSizeX()) >= player->getRightBound()&&levelend->getPosX()>=0)
+    if((1 == player->getPlayerDirection()) && (player->getPosX() + player->getSizeX()) >= player->getRightBound()&& levelEnd->getPosX() >= 0)
     {
         plat->setPlatformPosX(plat->getPlatformPosX() - 5);
         wall->setWallPosX(wall->getWallPosX() - 5);
@@ -167,7 +153,7 @@ void SuperCopGame::obstacleMovement()
         }
 
         location++;
-        levelEnd->setPosX(levelEnd->getPosX() - moveSpeed)
+        levelEnd->setPosX(levelEnd->getPosX() - moveSpeed);
     }
 
     if((-1 == player->getPlayerDirection()) && (player->getPosX() <= player->getLeftBound())&&0<location)

@@ -53,17 +53,14 @@ void MainWindow::on_actionControls_triggered()
 
 void MainWindow::on_actionHigh_Scores_triggered()
 {
-    if(hScore==NULL){
+    if(hScore==NULL)
+    {
         hScore = new HighScores();
     }else{
         delete hScore;
         hScore = new HighScores();
     }
-    else
-    {
-        delete hScore;
-        hScore = new HighScores();
-    }
+
     hScore->show();
 }//Opens an instance of the High Score window
 

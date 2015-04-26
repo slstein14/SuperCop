@@ -69,23 +69,6 @@ private:
     Donut *levelEnd;
     int moveSpeed;
 
-
-    int location;
-    vector<Donut*>donuts;
-    vector<Enemy*>enemies;
-    vector<int>donutspawn;
-    vector<int>enemyspawn;
-    Donut *levelend;
-    int movespeed;
-
-    int location;
-    vector<Donut*>donuts;
-    vector<Enemy*>enemies;
-    vector<int>donutspawn;
-    vector<int>enemyspawn;
-    Donut *levelend;
-    int movespeed;
-
 public:
     void paintEvent(QPaintEvent *e);
     explicit SuperCopGame(QWidget *parent = 0);

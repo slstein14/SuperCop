@@ -353,7 +353,6 @@ bool Player::isMoveLeft()
 {
     return moveLeft;
 }//Accessor
-<<<<<<< HEAD
 
 bool Player::isOnGround()
 {
