@@ -55,6 +55,9 @@ void MainWindow::on_actionHigh_Scores_triggered()
 {
     if(hScore==NULL){
         hScore = new HighScores();
+    }else{
+        delete hScore;
+        hScore = new HighScores();
     }
     else
     {

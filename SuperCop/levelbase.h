@@ -1,3 +1,5 @@
+//Alex Portolese and Sam Stein
+//This file contains the declarations for the Level floor.
 #ifndef LEVELBASE_H
 #define LEVELBASE_H
 
@@ -37,7 +39,9 @@ public:
 
     void setStairPosX(int x);
     int getStairPosX();
-
+    int getPlatformPosX();
+    int getPlatformPosY();
+    int getPlatformEnd();
     int getStep1PosX();
     int getStep2PosX();
     int getStep3PosX();

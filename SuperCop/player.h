@@ -1,3 +1,5 @@
+//Alex Portolese and Sam Stein
+//This file contains the declarations for the Player class.
 #ifndef Player_H
 #define Player_H
 
@@ -5,7 +7,6 @@
 #include <QPixmap>
 #include <QWidget>
 #include <QTimer>
-#include <QPixmap>
 #include <QKeyEvent>
 
 class Player : QObject

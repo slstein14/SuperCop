@@ -1,10 +1,10 @@
+//Alex Portolese and Sam Stein
+//This file contains the coding to make the player functional.
 #include "Player.h"
-//#include "player.h"
 #include "supercopgame.h"
 #include <QDebug>
 #include <QKeyEvent>
 #include <QTimer>
-
 
 Player::Player(QWidget *parent)
 {
@@ -13,7 +13,6 @@ Player::Player(QWidget *parent)
     sizeX = 25;
     sizeY = 43;
     image = new QPixmap("../SuperCop/Images/Running/Run0_1.png");
-
     frame = 0;
     lastActionPressed = 0;
     playerDirection = 1;
@@ -30,13 +29,12 @@ Player::Player(QWidget *parent)
     playerOnWall = false;
     playerOnPlatform = false;
     onGround = true;
-}
-
+}//initializes the player variables
 
 Player::~Player()
 {
     delete image;
-}
+}//Destructor
 
 
 void Player::drawPlayer(QPainter &painter)
@@ -47,14 +45,14 @@ void Player::drawPlayer(QPainter &painter)
     painter.setPen(Qt::red);
     painter.drawLine(rightBound, posY + 43, rightBound, posY - 43);
     painter.drawLine(leftBound, posY + 43, leftBound, posY - 43);
-}
+}//Draws the player
 
 
 void Player::changeImage(QString str)
 {
     delete image;
     image = new QPixmap(str);
-}
+}//Allows the player icon to be changed
 
 
 void Player::playerScreenPos(QWidget *w = 0)
@@ -70,7 +68,7 @@ void Player::playerScreenPos(QWidget *w = 0)
     {
         this->setPosX(this->getPosX() - 10);
     }
-}
+}//Controls whether the screen moves or the player does
 
 
 void Player::playerAction(int action)
@@ -81,7 +79,6 @@ void Player::playerAction(int action)
         frame = 0;
         lastActionPressed = action;
     }
-
     //Checks which direction is being called then runs the appropriate function
     switch (action)
     {
@@ -103,18 +100,14 @@ void Player::playerAction(int action)
     }
 
     playerScreenPos();
-}
+}//Calls the various player controlled movement functions
 
 
 void Player::jump()
 {
-        frame++;
-        jumping = true;
-        onGround = false;
-        playerOnPlatform = false;
-        playerOnWall = false;
+    frame++;
 
-        if(0 < this->getFrame() && 15 > this->getFrame())
+      if(0 < this->getFrame() && 15 > this->getFrame())
         {
             QString imagePath;
             if(0 < this->getFrame() && 8 > this->getFrame())
@@ -160,7 +153,7 @@ void Player::jump()
         {
             standBy();
         }
-}//Player State
+}//Controls Player Jumps
 
 
 void Player::roll()
@@ -218,11 +211,11 @@ void Player::roll()
     }
     else
     {
-        rolling == false;
+        rolling = false;
         standBy();
     }
 
-}//Player State
+}//Controls Player Rolls
 
 void Player::run()
 {
@@ -250,7 +243,7 @@ void Player::run()
             changeImage("../SuperCop/Images/Running/Run0_1.png");
         }
     }
-}//Player State
+}//Controls Player Running right
 
 void Player::runInverted()
 {
@@ -278,7 +271,7 @@ void Player::runInverted()
             changeImage("../SuperCop/Images/Running/Run1_1.png");
         }
     }
-}//Player State
+}//Controls Player Running Left
 
 void Player::standBy()
 {
@@ -291,12 +284,7 @@ void Player::standBy()
     {
         changeImage("../SuperCop/Images/Running/Run1_1.png");
     }
-    if(0 == playerDirection)
-    {
-        changeImage("../SuperCop/Images/Running/Run0_1.png");
-    }
-}//Player State
-
+}//Controls Player Stopped
 
 int Player::getFrame()
 {
@@ -402,12 +390,13 @@ void Player::setOnGround(bool onGround)
 void Player::setJumping(bool jump)
 {
     this->jumping = jump;
-}
+}//Mutator
 
 void Player::setOnWall(bool onWall)
 {
     this->playerOnWall = onWall;
-}
+}//Mutator
+
 
 void Player::setOnPlatform(bool onPlat)
 {

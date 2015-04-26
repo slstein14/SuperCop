@@ -1,3 +1,5 @@
+//Alex Portolese and Sam Stein
+//This file contains the declarations for the Donut class.
 #ifndef DONUT_H
 #define DONUT_H
 

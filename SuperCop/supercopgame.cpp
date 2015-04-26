@@ -1,3 +1,5 @@
+//Alex Portolese and Sam Stein
+//This file contains the coding to make the classes interact in the game.
 #include "supercopgame.h"
 #include "player.h"
 #include <QGraphicsScene>
@@ -12,7 +14,6 @@
 #include <donut.h>
 #include <QRect>
 using namespace std;
-
 
 
 SuperCopGame::SuperCopGame(QWidget *parent) :
@@ -53,7 +54,7 @@ SuperCopGame::SuperCopGame(QWidget *parent) :
     gamescore=0;
 
     location=0;
-}
+}//Initializes game variables
 
 
 SuperCopGame::~SuperCopGame()
@@ -63,7 +64,6 @@ SuperCopGame::~SuperCopGame()
     delete keyTimer;
     delete plat;
     delete wall;
-
     for(unsigned int i=0;i<enemyspawn.size();i++){
         delete enemies.at(i);
     }
@@ -75,7 +75,7 @@ SuperCopGame::~SuperCopGame()
     donuts.clear();
     donutspawn.clear();
     delete levelEnd;
-}
+}//Destructor
 
 
 void SuperCopGame::keyPressEvent(QKeyEvent *evt)
@@ -106,7 +106,6 @@ void SuperCopGame::keyPressEvent(QKeyEvent *evt)
         break;
     }
 }//Reads user key presses
-
 void SuperCopGame::keyReleaseEvent(QKeyEvent *evt)
 {
     switch(evt->key())
@@ -137,11 +136,11 @@ void SuperCopGame::setLastKeyPress(int key)
 void SuperCopGame::setPlatformX(int x)
 {
     plat->setPlatformPosX(x);
-}
+}//Sets the location of the platform
 
 void SuperCopGame::obstacleMovement()
 {
-    if((1 == player->getPlayerDirection()) && (player->getPosX() + player->getSizeX()) >= player->getRightBound())
+    if((1 == player->getPlayerDirection()) && (player->getPosX() + player->getSizeX()) >= player->getRightBound()&&levelend->getPosX()>=0)
     {
         plat->setPlatformPosX(plat->getPlatformPosX() - 5);
         wall->setWallPosX(wall->getWallPosX() - 5);
@@ -153,10 +152,10 @@ void SuperCopGame::obstacleMovement()
         }
 
         location++;
-        levelEnd->setPosX(levelEnd->getPosX() - moveSpeed);
+        levelEnd->setPosX(levelEnd->getPosX() - moveSpeed)
     }
 
-    if((-1 == player->getPlayerDirection()) && (player->getPosX() <= player->getLeftBound()))
+    if((-1 == player->getPlayerDirection()) && (player->getPosX() <= player->getLeftBound())&&0<location)
     {
         plat->setPlatformPosX(plat->getPlatformPosX() + 5);
         wall->setWallPosX(wall->getWallPosX() + 5);
@@ -181,7 +180,6 @@ void SuperCopGame::obstacleMovement()
         levelEnd->setPosX(levelEnd->getPosX() + moveSpeed);
     }
 }//Scrolls objects across the screen as necessary
-
 
 void SuperCopGame::physics()
 {
@@ -298,7 +296,6 @@ void SuperCopGame::physics()
     }
 }//Handles Collisions
 
-
 void SuperCopGame::pollKey() //DO NOT MODIFY. Code Works now.
 {
     //Checks if any of the keys are pressed.
@@ -331,14 +328,12 @@ void SuperCopGame::pollKey() //DO NOT MODIFY. Code Works now.
     }
 }//Checks which key is being pressed, stops animation loops
 
-
 void SuperCopGame::updateField()
 {
     player->playerAction(lastKeyPress);
     obstacleMovement();
     this->update();
 }//Updates the painted locations of objects based on a timer
-
 
 void SuperCopGame::paintEvent(QPaintEvent *e)
 {
@@ -511,7 +506,7 @@ void SuperCopGame::setVecs(QString level, int end)
         }
     }
     enemyread.close();
-
+	
     for(unsigned int i = 0; i < enemyspawn.size(); i++)
     {
         Enemy *enemy;
@@ -620,4 +615,3 @@ void SuperCopGame::setMoveSpeed(int spd)
 {
     moveSpeed = spd;
 }//set movement speed;
-

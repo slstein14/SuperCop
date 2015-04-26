@@ -1,3 +1,5 @@
+//Alex Portolese and Sam Stein
+//This file contains the coding to make the enemies functional.
 #include "enemy.h"
 #include "supercopgame.h"
 #include <QDebug>
@@ -11,7 +13,7 @@ Enemy::Enemy(QWidget *parent)
     sizeY = 40;
     robot = new QPixmap("../SuperCop/Images/Robot/robot.png");
     active=false;
-}
+}//initializes the enemy variables
 
 Enemy::~Enemy()
 {
@@ -22,13 +24,13 @@ Enemy::~Enemy()
 void Enemy::drawEnemy(QPainter &painter)
 {
     painter.drawPixmap(posX, posY, sizeX, sizeY, *robot);
-}
+}//Draws the enemy image
 
 void Enemy::changeImage(QString str)
 {
     delete robot;
     robot = new QPixmap(str);
-}
+}//allow for the enemy image to be changed
 
 
 void Enemy::setPosX(int x)
