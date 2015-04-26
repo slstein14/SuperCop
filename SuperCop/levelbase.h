@@ -54,7 +54,6 @@ public:
 
 public slots:
     void generatePiece();
-
 };
 
 #endif // LEVELBASE_H

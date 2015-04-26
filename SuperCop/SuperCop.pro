@@ -33,9 +33,13 @@ HEADERS  += mainwindow.h \
     player.h \
     enemy.h \
     levelbase.h \
+<<<<<<< HEAD
     donut.h \
     platform.h \
     wall.h
+=======
+    donut.h
+>>>>>>> c7d8bfb50a85e9275b0bd1e9d623e110e09ec278
 
 FORMS    += mainwindow.ui \
     controls.ui \

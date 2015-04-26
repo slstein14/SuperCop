@@ -221,6 +221,21 @@ void Player::run()
 {
     if(this->isJumping() && !this->isAscending() && !this->isOnGround() && !this->isOnPlatform() && !this->isOnWall())
     {
+        if(playerDirection == 1)
+        {
+            posY += 15;
+            posX += 1;
+        }
+        else if(playerDirection == -1)
+        {
+            posY += 10;
+            posX -= 1;
+        }
+        else
+        {
+            posY += 15;
+            posX = posX;
+        }
 
     }
     else
@@ -338,6 +353,7 @@ bool Player::isMoveLeft()
 {
     return moveLeft;
 }//Accessor
+<<<<<<< HEAD
 
 bool Player::isOnGround()
 {
@@ -380,12 +396,13 @@ void Player::setSizeX(int x)
 void Player::setSizeY(int y)
 {
     sizeY=y;
-}//Accessor
+}//Mutator
 
 void Player::setOnGround(bool onGround)
 {
     this->onGround = onGround;
-}
+}//Mutator
+
 
 void Player::setJumping(bool jump)
 {

@@ -15,7 +15,6 @@
 #include <QRect>
 using namespace std;
 
-
 SuperCopGame::SuperCopGame(QWidget *parent) :
     QWidget(parent)
 {
@@ -102,10 +101,25 @@ void SuperCopGame::keyPressEvent(QKeyEvent *evt)
         pbox->setText("Paused");
         pbox->exec();
         break;
+=======
+    {
+        QMessageBox pbox;
+        pbox.setText("Paused");
+        pbox.exec();
+        break;
+    }
+    case Qt::Key_P:
+    {
+        QMessageBox pbox;
+        pbox.setText("Paused");
+        pbox.exec();
+        break;
+    }
     default:
         break;
     }
 }//Reads user key presses
+
 void SuperCopGame::keyReleaseEvent(QKeyEvent *evt)
 {
     switch(evt->key())
@@ -137,6 +151,7 @@ void SuperCopGame::setPlatformX(int x)
 {
     plat->setPlatformPosX(x);
 }//Sets the location of the platform
+
 
 void SuperCopGame::obstacleMovement()
 {
@@ -327,6 +342,7 @@ void SuperCopGame::pollKey() //DO NOT MODIFY. Code Works now.
             lastKeyPress = 0;
     }
 }//Checks which key is being pressed, stops animation loops
+
 
 void SuperCopGame::updateField()
 {
@@ -594,6 +610,7 @@ void SuperCopGame::setHighScores()
               fourthscore = gamescore;
        }
        else if(fifthscore<gamescore)
+
        {
               fifthscore = gamescore;
        }
