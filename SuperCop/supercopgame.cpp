@@ -49,9 +49,7 @@ SuperCopGame::SuperCopGame(QWidget *parent) :
     isRightPressed = false;
 
     lastKeyPress = 0;
-
     gamescore=0;
-
     location=0;
 }//Initializes game variables
 
@@ -141,7 +139,7 @@ void SuperCopGame::setPlatformX(int x)
 
 void SuperCopGame::obstacleMovement()
 {
-    if((1 == player->getPlayerDirection()) && (player->getPosX() + player->getSizeX()) >= player->getRightBound()&& levelEnd->getPosX() >= 0)
+    if((1 == lastKeyPress) && (player->getPosX() + player->getSizeX()) >= player->getRightBound()&& levelEnd->getPosX() >= 0)
     {
         plat->setPlatformPosX(plat->getPlatformPosX() - 5);
         wall->setWallPosX(wall->getWallPosX() - 5);
@@ -156,7 +154,7 @@ void SuperCopGame::obstacleMovement()
         levelEnd->setPosX(levelEnd->getPosX() - moveSpeed);
     }
 
-    if((-1 == player->getPlayerDirection()) && (player->getPosX() <= player->getLeftBound())&&0<location)
+    if((4 == lastKeyPress) && (player->getPosX() <= player->getLeftBound())&&0<location)
     {
         plat->setPlatformPosX(plat->getPlatformPosX() + 5);
         wall->setWallPosX(wall->getWallPosX() + 5);
@@ -409,6 +407,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
         }//Handles game-ending collisions
     }//Handles all cases of enemy objects.
 
+    //Platform Collision handler
     if(playerRect.intersects(platRect) && (player->getPosY() < 285) && !player->isAscending())
     {
         player->setPosY(280);
@@ -419,6 +418,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
         pen2.setColor(Qt::green);
         pen3.setColor(Qt::red);
     }
+    //Wall Collison handler
     else if(playerRect.intersects(wallRect) && (player->getPosY() < 305) && !player->isAscending())
     {
         player->setPosY(300);
@@ -429,6 +429,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
         pen2.setColor(Qt::red);
         pen3.setColor(Qt::green);
     }
+    //Ground Collision handler
     else
     {
         if((player->getPosY() >= player->getGround()) && !player->isAscending() && !player->isOnWall() && !player->isOnPlatform())
@@ -441,10 +442,11 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
             pen2.setColor(Qt::red);
             pen3.setColor(Qt::red);
         }
+        //Lower Player until collision occurs
         else
         {
             player->setPosY(player->getPosY() + 10);
-            player->setJumping(false);
+            player->setJumping(true);
             player->setOnPlatform(false);
             player->setOnWall(false);
             player->setOnGround(false);
@@ -490,7 +492,6 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     }
 
 }//Handles Painting all elements on screen
-
 
 void SuperCopGame::setVecs(QString level, int end)
 {

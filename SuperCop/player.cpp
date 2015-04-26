@@ -29,6 +29,8 @@ Player::Player(QWidget *parent)
     playerOnWall = false;
     playerOnPlatform = false;
     onGround = true;
+    upPressed = false;
+
 }//initializes the player variables
 
 Player::~Player()
@@ -76,9 +78,13 @@ void Player::playerAction(int action)
     //If the new direction does not match the previous direction, reset the frame counter to zero.
     if(action != lastActionPressed)
     {
-        frame = 0;
-        lastActionPressed = action;
+        if(!upPressed)
+        {
+            frame = 0;
+        }
+            lastActionPressed = action;
     }
+
     //Checks which direction is being called then runs the appropriate function
     switch (action)
     {
@@ -106,53 +112,54 @@ void Player::playerAction(int action)
 void Player::jump()
 {
     frame++;
-
-      if(0 < this->getFrame() && 15 > this->getFrame())
+    jumping = true;
+    upPressed = true;
+    if(0 < this->getFrame() && 10 > this->getFrame())
+    {
+        QString imagePath;
+        if(0 < this->getFrame() && 5 > this->getFrame())
         {
-            QString imagePath;
-            if(0 < this->getFrame() && 8 > this->getFrame())
+            ascend = true;
+            switch(playerDirection)
             {
-                ascend = true;
-                switch(playerDirection)
-                {
-                case WEST:
-                    imagePath = QString("../SuperCop/Images/Running/Run1_1.png");
-                    changeImage(imagePath);
-                    posY -= 30;
-                    break;
-                case EAST:
-                    imagePath = QString("../SuperCop/Images/Running/Run0_1.png");
-                    changeImage(imagePath);
-                    posY -= 30;
-                    break;
-                case STAND:
-                    break;
-                }
-            }
-            else
-            {
-                ascend = false;
-                switch(playerDirection)
-                {
-                case WEST:
-                    imagePath = QString("../SuperCop/Images/Running/Run1_1.png");
-                    changeImage(imagePath);
-//                    posY += 10;
-                    break;
-                case EAST:
-                    imagePath = QString("../SuperCop/Images/Running/Run0_1.png");
-                    changeImage(imagePath);
-//                    posY += 10;
-                    break;
-                case STAND:
-                    break;
-                }
+            case WEST:
+                imagePath = QString("../SuperCop/Images/Running/Run1_1.png");
+                changeImage(imagePath);
+                posY -= 30;
+                break;
+            case EAST:
+                imagePath = QString("../SuperCop/Images/Running/Run0_1.png");
+                changeImage(imagePath);
+                posY -= 30;
+                break;
+            case STAND:
+                break;
             }
         }
         else
         {
-            standBy();
+            ascend = false;
+            switch(playerDirection)
+            {
+            case WEST:
+                imagePath = QString("../SuperCop/Images/Running/Run1_1.png");
+                changeImage(imagePath);
+                //                    posY += 10;
+                break;
+            case EAST:
+                imagePath = QString("../SuperCop/Images/Running/Run0_1.png");
+                changeImage(imagePath);
+                //                    posY += 10;
+                break;
+            case STAND:
+                break;
+            }
         }
+    }
+    else
+    {
+        standBy();
+    }
 }//Controls Player Jumps
 
 
@@ -169,15 +176,19 @@ void Player::roll()
             switch(playerDirection)
             {
             case WEST:
-                if(this->getPosX() - 8 > leftBound)
+                if(this->getPosX() - 8 >= leftBound)
                     this->setPosX(this->getPosX() - 8);
+                else
+                    this->setPosX(this->getPosX());
 
                 imagePath = QString("../SuperCop/Images/Rolling/Roll1_%1.png").arg(QString::number(frame));
                 changeImage(imagePath);
                 break;
             case EAST:
-                if(this->getPosX() + 8 < rightBound)
+                if(this->getPosX() + 33 < rightBound)
                     this->setPosX(this->getPosX() + 8);
+                else
+                    this->setPosX(this->getPosX());
 
                 imagePath = QString("../SuperCop/Images/Rolling/Roll0_%1.png").arg(QString::number(frame));
                 changeImage(imagePath);
@@ -193,13 +204,17 @@ void Player::roll()
             case WEST:
                 if(this->getPosX() - 3 > leftBound)
                     this->setPosX(this->getPosX() - 3);
+                else
+                    this->setPosX(this->getPosX());
 
                 imagePath = QString("../SuperCop/Images/Rolling/Roll1_%1.png").arg(QString::number(frame));
                 changeImage(imagePath);
                 break;
             case EAST:
-                if(this->getPosX() + 3 < rightBound)
+                if(this->getPosX() + 28 < rightBound)
                     this->setPosX(this->getPosX() + 3);
+                else
+                    this->setPosX(this->getPosX());
 
                 imagePath = QString("../SuperCop/Images/Rolling/Roll0_%1.png").arg(QString::number(frame));
                 changeImage(imagePath);
@@ -217,31 +232,30 @@ void Player::roll()
 
 }//Controls Player Rolls
 
+
 void Player::run()
 {
-    if(this->isJumping() && !this->isAscending() && !this->isOnGround() && !this->isOnPlatform() && !this->isOnWall())
+    if(this->isJumping() && (!this->isOnGround() && !this->isOnPlatform() && !this->isOnWall()))
     {
-        if(playerDirection == 1)
-        {
-            posY += 15;
+        if(posX + 26 < rightBound)
             posX += 1;
-        }
-        else if(playerDirection == -1)
-        {
-            posY += 10;
-            posX -= 1;
-        }
+        else
+            posX = posX;
+
+        if(!upPressed)
+            frame = 5;
         else
         {
-            posY += 15;
-            posX = posX;
+            frame = frame;
+            upPressed = true;
         }
-
+        jump();
     }
     else
     {
         jumping = false;
         frame++;
+        upPressed = false;
         QString imagePath = QString("../SuperCop/Images/Running/Run0_%1.png").arg(frame);
 
         if(0 < this->getFrame() && 4 > this->getFrame())
@@ -260,11 +274,24 @@ void Player::run()
     }
 }//Controls Player Running right
 
+
 void Player::runInverted()
 {
-    if(this->isJumping() && !this->isAscending() && !this->onGround)
+    if(this->isJumping() && (!this->isOnGround() && !this->isOnPlatform() && !this->isOnWall()))
     {
+        if(posX - 1 > leftBound)
+            posX -= 1;
+        else
+            posX = posX;
 
+        if(!upPressed)
+            frame = 5;
+        else
+        {
+            frame = frame;
+            upPressed = true;
+        }
+        jump();
     }
     else
     {
@@ -288,6 +315,7 @@ void Player::runInverted()
     }
 }//Controls Player Running Left
 
+
 void Player::standBy()
 {
     //Checks which direction the player was moving last then sets the appropiate standing image
@@ -300,6 +328,7 @@ void Player::standBy()
         changeImage("../SuperCop/Images/Running/Run1_1.png");
     }
 }//Controls Player Stopped
+
 
 int Player::getFrame()
 {
