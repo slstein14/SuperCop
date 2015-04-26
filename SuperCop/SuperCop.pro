@@ -20,7 +20,10 @@ SOURCES += main.cpp\
     supercopgame.cpp \
     player.cpp \
     enemy.cpp \
-    levelbase.cpp
+    levelbase.cpp \
+    donut.cpp \
+    platform.cpp \
+    wall.cpp
 
 HEADERS  += mainwindow.h \
     controls.h \
@@ -29,7 +32,10 @@ HEADERS  += mainwindow.h \
     supercopgame.h \
     player.h \
     enemy.h \
-    levelbase.h
+    levelbase.h \
+    donut.h \
+    platform.h \
+    wall.h
 
 FORMS    += mainwindow.ui \
     controls.ui \
@@ -37,6 +43,4 @@ FORMS    += mainwindow.ui \
     highscores.ui \
     supercopgame.ui
 
-DISTFILES += \
-    CopRollAnim.qml \
-    CopRunAnim.qml
+DISTFILES +=

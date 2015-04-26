@@ -4,37 +4,37 @@
 #include <QPainter>
 #include <QWidget>
 #include <QRect>
+#include <QTimer>
+//#include "platform.h"
 
 
 class LevelBase
 {
 private:
     QPixmap *floor;
+
     int floorStart;
     double floorLength;
     int floorHeight;
     int picX;
     int picY;
     int gameWindow;
-    int platformHeight;
-    int platformPosX;
     int stairPosX, stairPosY;
 
     int step1Y, step2Y, step3Y, step4Y;
     int step1X, step2X, step3X, step4X;
 
     QRect *rect;
-    QRect *rectPlat;
+    QTimer *generateLevel;
 
 public:
     LevelBase(QWidget *parent);
     ~LevelBase();
     void drawLevel(QPainter &painter);
     void drawLevelBase(QPainter &painter);
-    void drawPlatform(QPainter &painter);
     void drawStairs(QPainter &painter);
+    void drawLevel();
 
-    void setPlatformPosX(int x);
     void setStairPosX(int x);
     int getStairPosX();
 
@@ -48,9 +48,8 @@ public:
     int getStep3PosY();
     int getStep4PosY();
 
-    int getPlatformPosX();
-    int getPlatformPosY();
-    int getPlatformEnd();
+public slots:
+    void generatePiece();
 
 };
 

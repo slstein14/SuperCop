@@ -26,7 +26,10 @@ Player::Player(QWidget *parent)
     jumping = false;
     moveRight = false;
     moveLeft = false;
-    collided = true;
+    ascend = false;
+    playerOnWall = false;
+    playerOnPlatform = false;
+    onGround = true;
 }
 
 
@@ -106,25 +109,28 @@ void Player::playerAction(int action)
 void Player::jump()
 {
         frame++;
+        jumping = true;
+        onGround = false;
+        playerOnPlatform = false;
+        playerOnWall = false;
 
         if(0 < this->getFrame() && 15 > this->getFrame())
         {
             QString imagePath;
-            jumping = true;
-//            collided = false;
             if(0 < this->getFrame() && 8 > this->getFrame())
             {
+                ascend = true;
                 switch(playerDirection)
                 {
                 case WEST:
                     imagePath = QString("../SuperCop/Images/Running/Run1_1.png");
                     changeImage(imagePath);
-                    posY -= 15;
+                    posY -= 30;
                     break;
                 case EAST:
                     imagePath = QString("../SuperCop/Images/Running/Run0_1.png");
                     changeImage(imagePath);
-                    posY -= 15;
+                    posY -= 30;
                     break;
                 case STAND:
                     break;
@@ -132,17 +138,18 @@ void Player::jump()
             }
             else
             {
+                ascend = false;
                 switch(playerDirection)
                 {
                 case WEST:
                     imagePath = QString("../SuperCop/Images/Running/Run1_1.png");
                     changeImage(imagePath);
-                    posY += 15;
+//                    posY += 10;
                     break;
                 case EAST:
                     imagePath = QString("../SuperCop/Images/Running/Run0_1.png");
                     changeImage(imagePath);
-                    posY += 15;
+//                    posY += 10;
                     break;
                 case STAND:
                     break;
@@ -151,10 +158,7 @@ void Player::jump()
         }
         else
         {
-            jumping = false;
             standBy();
-            this->setPosY(ground);
-
         }
 }//Player State
 
@@ -172,12 +176,16 @@ void Player::roll()
             switch(playerDirection)
             {
             case WEST:
-                this->setPosX(this->getPosX() - 8);
+                if(this->getPosX() - 8 > leftBound)
+                    this->setPosX(this->getPosX() - 8);
+
                 imagePath = QString("../SuperCop/Images/Rolling/Roll1_%1.png").arg(QString::number(frame));
                 changeImage(imagePath);
                 break;
             case EAST:
-                this->setPosX(this->getPosX() + 8);
+                if(this->getPosX() + 8 < rightBound)
+                    this->setPosX(this->getPosX() + 8);
+
                 imagePath = QString("../SuperCop/Images/Rolling/Roll0_%1.png").arg(QString::number(frame));
                 changeImage(imagePath);
                 break;
@@ -190,12 +198,16 @@ void Player::roll()
             switch(playerDirection)
             {
             case WEST:
-                this->setPosX(this->getPosX() - 3);
+                if(this->getPosX() - 3 > leftBound)
+                    this->setPosX(this->getPosX() - 3);
+
                 imagePath = QString("../SuperCop/Images/Rolling/Roll1_%1.png").arg(QString::number(frame));
                 changeImage(imagePath);
                 break;
             case EAST:
-                this->setPosX(this->getPosX() + 3);
+                if(this->getPosX() + 3 < rightBound)
+                    this->setPosX(this->getPosX() + 3);
+
                 imagePath = QString("../SuperCop/Images/Rolling/Roll0_%1.png").arg(QString::number(frame));
                 changeImage(imagePath);
                 break;
@@ -212,30 +224,15 @@ void Player::roll()
 
 }//Player State
 
-
 void Player::run()
 {
-    if(this->isJumping() && !this->isCollided())
+    if(this->isJumping() && !this->isAscending() && !this->isOnGround() && !this->isOnPlatform() && !this->isOnWall())
     {
-        if(playerDirection == 1)
-        {
-            posY += 15;
-            posX += 1;
-        }
-        else if(playerDirection == -1)
-        {
-            posY += 10;
-            posX -= 1;
-        }
-        else
-        {
-            posY += 15;
-            posX = posX;
-        }
+
     }
     else
     {
-        this->setPosY(ground);
+        jumping = false;
         frame++;
         QString imagePath = QString("../SuperCop/Images/Running/Run0_%1.png").arg(frame);
 
@@ -255,45 +252,30 @@ void Player::run()
     }
 }//Player State
 
-
 void Player::runInverted()
 {
-    if(this->isJumping() && !this->isCollided())
+    if(this->isJumping() && !this->isAscending() && !this->onGround)
     {
-        if(playerDirection == 1)
-        {
-            posY += 15;
-            posX += 1;
-        }
-        else if(playerDirection == -1)
-        {
-            posY += 15;
-            posX -= 1;
-        }
-        else
-        {
-            posY += 15;
-            posX = posX;
-        }
+
     }
     else
     {
         frame++;
-
+        jumping = false;
         QString imagePath = QString("../SuperCop/Images/Running/Run1_%1.png").arg(frame);
 
         if(0 < this->getFrame() && 4 > this->getFrame())
         {
-            moveLeft = true;
             changeImage(imagePath);
+            moveLeft = true;
             playerDirection = -1;
         }
         else
         {
             frame = 0;
             moveLeft = false;
-            changeImage("../SuperCop/Images/Running/Run1_1.png");
             playerDirection = -1;
+            changeImage("../SuperCop/Images/Running/Run1_1.png");
         }
     }
 }//Player State
@@ -304,14 +286,16 @@ void Player::standBy()
     if(1 == playerDirection)
     {
         changeImage("../SuperCop/Images/Running/Run0_1.png");
-        collided = true;
     }
     if(-1 == playerDirection)
     {
         changeImage("../SuperCop/Images/Running/Run1_1.png");
-        collided = true;
     }
-}
+    if(0 == playerDirection)
+    {
+        changeImage("../SuperCop/Images/Running/Run0_1.png");
+    }
+}//Player State
 
 
 int Player::getFrame()
@@ -329,19 +313,19 @@ int Player::getLeftBound()
 int Player::getRightBound()
 {
     return rightBound;
-}
+}//Accessor
 
 
 int Player::getPlayerDirection()
 {
     return playerDirection;
-}
+}//Accessor
 
 
 int Player::getGround()
 {
     return ground;
-}
+}//Accessor
 
 
 bool Player::isRolling()
@@ -365,11 +349,26 @@ bool Player::isMoveRight()
 bool Player::isMoveLeft()
 {
     return moveLeft;
+}//Accessor
+
+bool Player::isOnGround()
+{
+    return onGround;
 }
 
-bool Player::isCollided()
+bool Player::isAscending()
 {
-    return collided;
+    return ascend;
+}
+
+bool Player::isOnPlatform()
+{
+    return playerOnPlatform;
+}
+
+bool Player::isOnWall()
+{
+    return playerOnWall;
 }//Accessor
 
 void Player::setPosX(int x)
@@ -393,12 +392,27 @@ void Player::setSizeX(int x)
 void Player::setSizeY(int y)
 {
     sizeY=y;
+}//Accessor
+
+void Player::setOnGround(bool onGround)
+{
+    this->onGround = onGround;
 }
 
-void Player::setCollided(bool collided)
+void Player::setJumping(bool jump)
 {
-    this->collided = collided;
+    this->jumping = jump;
 }
+
+void Player::setOnWall(bool onWall)
+{
+    this->playerOnWall = onWall;
+}
+
+void Player::setOnPlatform(bool onPlat)
+{
+    this->playerOnPlatform = onPlat;
+}//Accessor
 
 int Player::getPosX()
 {

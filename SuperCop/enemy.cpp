@@ -1,34 +1,27 @@
 #include "enemy.h"
 #include "supercopgame.h"
 #include <QDebug>
-#include <QTimer>
 
 Enemy::Enemy(QWidget *parent)
 {
 
     posX = 620;
-    posY = parent->height() - 220;
-    sizeX = 85;
-    sizeY = 85;
+    posY = parent->height() - 140;
+    sizeX = 40;
+    sizeY = 40;
     robot = new QPixmap("../SuperCop/Images/Robot/robot.png");
-    moveTimer = new QTimer();
-    moveTimer->setInterval(10);
-//    frame = 0;
-    moveTimer->start();
-    speed=5;
+    active=false;
 }
 
 Enemy::~Enemy()
 {
     delete robot;
-    moveTimer->stop();
-    delete moveTimer;
+
 }//Destructor
 
 void Enemy::drawEnemy(QPainter &painter)
 {
     painter.drawPixmap(posX, posY, sizeX, sizeY, *robot);
-    posX-=speed;
 }
 
 void Enemy::changeImage(QString str)
@@ -58,11 +51,6 @@ void Enemy::setSizeY(int y)
     sizeY=y;
 }//Mutator
 
-void Enemy::setSpeed(int speed)
-{
-    this->speed=speed;
-}//Mutator
-
 int Enemy::getPosX()
 {
     return posX;
@@ -81,10 +69,14 @@ int Enemy::getSizeX()
 int Enemy::getSizeY()
 {
     return sizeY;
-}//Accessor
+}
 
-int Enemy::getSpeed()
+bool Enemy::getActive()
 {
-   return speed;
-}//Accessor
+    return active;
+}//Mutator
 
+void Enemy::setActive(bool act)
+{
+    active=act;
+}//Accessor

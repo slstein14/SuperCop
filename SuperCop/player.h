@@ -16,8 +16,8 @@ private:
 //    enum keyPress2 {W = UP, A = LEFT, S = DOWN, D = RIGHT};
     enum direction {WEST = -1, STAND = 0, EAST = 1};
 
-    bool rolling, jumping, moveLeft, moveRight;
-    bool collided;
+    bool rolling, jumping, moveLeft, moveRight, ascend;
+    bool onGround, playerOnWall, playerOnPlatform;
     int posX, posY;
     int sizeX, sizeY;
 
@@ -49,8 +49,11 @@ public:
     void setPosY(int y);
     void setSizeX(int x);
     void setSizeY(int y);
-    void setCollided(bool collided);
+    void setOnGround(bool onGround);
     void setSpeedY(int y);
+    void setJumping(bool jump);
+    void setOnWall(bool onWall);
+    void setOnPlatform(bool onPlat);
 
     int getPosX();
     int getPosY();
@@ -67,7 +70,10 @@ public:
     bool isJumping();
     bool isMoveRight();
     bool isMoveLeft();
-    bool isCollided();
+    bool isOnGround();
+    bool isAscending();
+    bool isOnPlatform();
+    bool isOnWall();
 
 public slots:
     void playerAction(int action);
