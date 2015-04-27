@@ -427,7 +427,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     else
     {
         player->setPosY(player->getPosY() + 10);
-        player->setJumping(true);
+        //player->setJumping(true);
         player->setOnPlatform(false);
         player->setOnWall(false);
         player->setOnGround(false);
