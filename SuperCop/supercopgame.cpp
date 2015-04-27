@@ -21,8 +21,6 @@ SuperCopGame::SuperCopGame(QWidget *parent) :
     srand(time(0));
     player = new Player(this);
     lb = new LevelBase(this);
-    plat = new Platform(this);
-    wall = new Wall(this);
     msg = new QMessageBox();
     pbox = new QMessageBox();
 
@@ -59,19 +57,35 @@ SuperCopGame::~SuperCopGame()
     delete timer;
     delete player;
     delete keyTimer;
-    delete plat;
-    delete wall;
+
     for(unsigned int i=0;i<enemyspawn.size();i++){
         delete enemies.at(i);
     }
     enemies.clear();
     enemyspawn.clear();
+
     for(unsigned int i=0;i<donutspawn.size();i++){
         delete donuts.at(i);
     }
     donuts.clear();
     donutspawn.clear();
+
+    for(unsigned int i = 0; i < wallSpawn.size(); i++)
+    {
+        delete walls.at(i);
+    }
+    walls.clear();
+    wallSpawn.clear();
+
+    for(unsigned int i = 0; i < platSpawn.size(); i++)
+    {
+        delete platforms.at(i);
+    }
+    platforms.clear();
+    platSpawn.clear();
+
     delete levelEnd;
+
 }//Destructor
 
 
@@ -131,20 +145,29 @@ void SuperCopGame::setLastKeyPress(int key)
     this->lastKeyPress = key;
 }//Sets key based on key presses
 
-void SuperCopGame::setPlatformX(int x)
-{
-    plat->setPlatformPosX(x);
-}//Sets the location of the platform
-
 
 void SuperCopGame::obstacleMovement()
 {
     if((1 == lastKeyPress || 2 == lastKeyPress) && (player->getPosX() + player->getSizeX()) >= player->getRightBound()&& levelEnd->getPosX() >= 0)
     {
-        plat->setPlatformPosX(plat->getPlatformPosX() - 5);
-        wall->setWallPosX(wall->getWallPosX() - 5);
+        for(unsigned int i = 0; i < platforms.size(); i++)
+        {
+            if((*(platforms.at(i))).isActive())
+            {
+                (*(platforms.at(i))).setPlatformPosX((*(platforms.at(i))).getPlatformPosX() - 5);
+            }
+        }
 
-        for(unsigned int i = 0; i < donuts.size(); i++){
+        for(unsigned int i = 0; i < walls.size(); i++)
+        {
+            if((*(walls.at(i))).isActive())
+            {
+                (*(walls.at(i))).setWallPosX((*(walls.at(i))).getWallPosX() - 5);
+            }
+        }
+
+        for(unsigned int i = 0; i < donuts.size(); i++)
+        {
             if((*(donuts.at(i))).getActive()){
                 (*(donuts.at(i))).setPosX((*(donuts.at(i))).getPosX() - moveSpeed);
             }
@@ -156,8 +179,21 @@ void SuperCopGame::obstacleMovement()
 
     if((4 == lastKeyPress || 2 == lastKeyPress) && (player->getPosX() <= player->getLeftBound())&&0<location)
     {
-        plat->setPlatformPosX(plat->getPlatformPosX() + 5);
-        wall->setWallPosX(wall->getWallPosX() + 5);
+        for(unsigned int i = 0; i < platforms.size(); i++)
+        {
+            if((*(platforms.at(i))).isActive())
+            {
+                (*(platforms.at(i))).setPlatformPosX((*(platforms.at(i))).getPlatformPosX() + 5);
+            }
+        }
+
+        for(unsigned int i = 0; i < walls.size(); i++)
+        {
+            if((*(walls.at(i))).isActive())
+            {
+                (*(walls.at(i))).setWallPosX((*(walls.at(i))).getWallPosX() + 5);
+            }
+        }
 
         for(unsigned int i=0;i<donuts.size();i++)
         {
@@ -175,129 +211,14 @@ void SuperCopGame::obstacleMovement()
                 (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() + 3);
             }
         }
+
         location--;
         levelEnd->setPosX(levelEnd->getPosX() + moveSpeed);
     }
 }//Scrolls objects across the screen as necessary
 
 
-void SuperCopGame::physics()
-{
-    QPen pen2;
-    QPen pen3;
-    //Platform Collision Detection
-    if(((player->getPosX() + 12) >= plat->getPlatformPosX()) && ((player->getPosX() + 12) <= plat->getPlatformEnd()) && (player->getPosY() <= 280))
-    {
-        if(!player->isAscending() && (player->getPosY() >= 280) && (player->getPosY() <= 296))
-        {
-            player->setOnPlatform(true);
-            player->setJumping(false);
-            player->setOnGround(false);
-            player->setOnWall(false);
-            player->setPosY(280);
-            pen2.setColor(Qt::green);
-            pen3.setColor(Qt::red);
-        }
-        else
-        {
-            if(!player->isAscending() && (player->getPosY() >= player->getGround()))
-            {
-                player->setPosY(player->getGround());
-                player->setOnGround(true);
-                player->setJumping(false);
-                player->setOnPlatform(false);
-                player->setOnWall(false);
-                pen2.setColor(Qt::red);
-                pen3.setColor(Qt::red);
-            }
-            else
-            {
-                player->setPosY(player->getPosY() + 10);
-                player->setOnGround(false);
-                player->setOnWall(false);
-                player->setOnPlatform(false);
-                player->setJumping(true);
-                pen2.setColor(Qt::red);
-                pen3.setColor(Qt::red);
-            }
-        }
-    }
-    //Wall Collision Detection
-    else if(((player->getPosX() + 12) >= wall->getWallPosX()) && ((player->getPosX() + 12) <= wall->getWallPosX() + 50) && (player->getPosY() <= 300))
-    {
-        if(!player->isAscending() && ((player->getPosY() >= 300) && (player->getPosY() <= 310)))
-        {
-            player->setOnWall(true);
-            player->setJumping(false);
-            player->setOnGround(false);
-            player->setOnPlatform(false);
-            player->setPosY(300);
-            pen2.setColor(Qt::red);
-            pen3.setColor(Qt::green);
-        }
-        else
-        {
-            if(!player->isAscending() && (player->getPosY() >= player->getGround()))
-            {
-                player->setPosY(player->getGround());
-                player->setOnGround(true);
-                player->setJumping(false);
-                player->setOnPlatform(false);
-                player->setOnWall(false);
-                pen2.setColor(Qt::red);
-                pen3.setColor(Qt::red);
-            }
-            else
-            {
-                player->setPosY(player->getPosY() + 10);
-                player->setOnGround(false);
-                player->setOnWall(false);
-                player->setOnPlatform(false);
-                player->setJumping(true);
-                pen2.setColor(Qt::red);
-                pen3.setColor(Qt::red);
-            }
-        }
-    }
-    //Ground Collision Detection when player is not on wall or platform
-    else if(!player->isOnGround() && !player->isOnPlatform() && !player->isOnWall())
-    {
-        if(!player->isAscending() && (player->getPosY() >= player->getGround()))
-        {
-            player->setPosY(player->getGround());
-            player->setOnGround(true);
-            player->setJumping(false);
-            player->setOnPlatform(false);
-            player->setOnWall(false);
-            pen2.setColor(Qt::red);
-            pen3.setColor(Qt::red);
-        }
-        else
-        {
-            player->setPosY(player->getPosY() + 10);
-            player->setOnGround(false);
-            player->setOnWall(false);
-            player->setOnPlatform(false);
-            player->setJumping(true);
-            pen2.setColor(Qt::red);
-            pen3.setColor(Qt::red);
-        }
-    }
-    //Keep player at ground level
-    else
-    {
-        player->setPosY(player->getGround());
-        player->setOnGround(true);
-        player->setJumping(false);
-        player->setOnWall(false);
-        player->setOnPlatform(false);
-        pen2.setColor(Qt::red);
-        pen3.setColor(Qt::red);
-    }
-}//Handles Collisions
-
-
-void SuperCopGame::pollKey() //DO NOT MODIFY. Code Works now.
+void SuperCopGame::pollKey() //DO NOT MODIFY
 {
     //Checks if any of the keys are pressed.
     if(isDownPressed)
@@ -342,19 +263,12 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     player->drawPlayer(painter);
     lb->drawLevel(painter);
-    plat->drawPlatform(painter);
-    wall->drawWall(painter);
-
-    QPen pen2;
-    QPen pen3;
 
     //===========================================================
     //    START PHYSICS
     //===========================================================
     QRect enemyRect, playerRect, donutRect, levelEndRect, platRect, wallRect;
     playerRect = QRect(player->getPosX(),player->getPosY(),player->getSizeX(),player->getSizeY());
-    platRect = QRect(plat->getPlatformPosX(), plat->getPlatformPosY(), plat->getPlatformSizeX(), plat->getPlatformSizeY());
-    wallRect = QRect(wall->getWallPosX(), wall->getWallPosY(), wall->getWallSizeX(), wall->getWallSizeY());
 
     for(unsigned int i = 0; i < donuts.size(); i++)
     {
@@ -409,6 +323,38 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
         }//Handles game-ending collisions
     }//Handles all cases of enemy objects.
 
+    for(unsigned int i = 0; i < walls.size(); i++)
+    {
+        wallRect = QRect((*(walls.at(i))).getWallPosX(), (*(walls.at(i))).getWallPosY(), (*(walls.at(i))).getWallSizeX(), (*(walls.at(i))).getWallSizeY());
+
+        if(wallSpawn.at(i) == location)
+        {
+            (*(walls.at(i))).setActive(true);
+        }//Spawns a wall at each read location
+
+        if((*walls.at(i)).isActive())
+        {
+            (*(walls.at(i))).drawWall(painter);
+        }//Controls whether wall is drawn on screen
+
+    }//Handles all wall objects
+
+    for(unsigned int i = 0; i < platforms.size(); i++)
+    {
+        platRect = QRect((*(platforms.at(i))).getPlatformPosX(), (*(platforms.at(i))).getPlatformPosY(), (*(platforms.at(i))).getPlatformSizeX(), (*(platforms.at(i))).getPlatformSizeY());
+
+        if(platSpawn.at(i) == location)
+        {
+            (*(platforms.at(i))).setActive(true);
+        }//Spawns platform of each read location
+
+        if((*platforms.at(i)).isActive())
+        {
+            (*(platforms.at(i))).drawPlatform(painter);
+        }//Controls whether wall is drawn on screen
+
+    }//handles all platform objects
+
     //Platform Collision handler
     if(playerRect.intersects(platRect) && (player->getPosY() < 285) && !player->isAscending())
     {
@@ -417,8 +363,6 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
         player->setOnPlatform(true);
         player->setOnWall(false);
         player->setOnGround(false);
-        pen2.setColor(Qt::green);
-        pen3.setColor(Qt::red);
     }
     //Wall Collison handler
     else if(playerRect.intersects(wallRect) && (player->getPosY() < 305) && !player->isAscending())
@@ -428,8 +372,6 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
         player->setOnPlatform(false);
         player->setOnWall(true);
         player->setOnGround(false);
-        pen2.setColor(Qt::red);
-        pen3.setColor(Qt::green);
     }
     //Ground Collision handler
     else
@@ -441,8 +383,6 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
             player->setOnPlatform(false);
             player->setOnWall(false);
             player->setOnGround(true);
-            pen2.setColor(Qt::red);
-            pen3.setColor(Qt::red);
         }
         //Lower Player until collision occurs
         else
@@ -452,19 +392,17 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
             player->setOnPlatform(false);
             player->setOnWall(false);
             player->setOnGround(false);
-            pen2.setColor(Qt::red);
-            pen3.setColor(Qt::red);
         }
     }
 
     //Checks for player colliding with the left side of a wall
-    if((player->getPosY() + 40 > wall->getWallPosY()) && (playerRect.intersects(wallRect)) && (1 == player->getPlayerDirection()))
+    if((player->getPosY() + 40 > wallRect.top()) && (playerRect.intersects(wallRect)) && (1 == player->getPlayerDirection()))
     {
         player->setPosX(player->getPosX() - 1);
         player->setWallCollided(true);
     }
     //Checks for player colliding with the left side of a wall
-    else if((player->getPosY() + 40 > wall->getWallPosY()) && (playerRect.intersects(wallRect)) && (-1 == player->getPlayerDirection()))
+    else if((player->getPosY() + 40 > wallRect.top()) && (playerRect.intersects(wallRect)) && (-1 == player->getPlayerDirection()))
     {
         player->setPosX(player->getPosX() + 1);
         player->setWallCollided(true);
@@ -487,17 +425,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     painter.drawText(10, 20, QString("LastKeyPress: %1").arg(QString::number(lastKeyPress)));
     painter.drawText(10, 30, QString("location: %1").arg(QString::number(location)));
     painter.drawText(10, 40, QString("PlayerPosY: %1").arg(QString::number(player->getPosY() + 43)));
-    painter.drawText(10, 70, QString("Player Direction: %1").arg(QString::number(player->getPlayerDirection())));
-    painter.drawText(10, 80, QString("WallPosY: %1").arg(QString::number(wall->getWallPosY())));
-    painter.drawText(10, 90, QString("PlayerPosX: %1    WallPosX: %2").arg(QString::number(player->getPosX())).arg(QString::number(wall->getWallPosX())));
-    QPainter flagPainter(this);
-    QPainter wallPainter(this);
-
-    flagPainter.setPen(pen2);
-    wallPainter.setPen(pen3);
-    flagPainter.drawText(10, 50, QString("Above Platform"));
-    wallPainter.drawText(10, 60, QString("Above Wall"));
-
+    painter.drawText(10, 50, QString("Player Direction: %1").arg(QString::number(player->getPlayerDirection())));
 
     //END DEBUG ITEMS
 

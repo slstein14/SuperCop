@@ -5,8 +5,10 @@ Platform::Platform(QWidget *parent)
     gameWindow = parent->width();
     platform = new QPixmap("../SuperCop/Images/Wall/0.png");
     platformHeight = parent->height() - 160;
-    platformPosX = gameWindow - (gameWindow / 6);
+    platformPosX = 620;
     platformLength = 48;
+
+    active = false;
 }
 
 Platform::~Platform()
@@ -26,6 +28,11 @@ void Platform::drawPlatform(QPainter &painter)
 void Platform::setPlatformPosX(int x)
 {
     this->platformPosX = x;
+}
+
+void Platform::setActive(bool active)
+{
+    this->active = active;
 }
 
 int Platform::getPlatformPosX()
@@ -51,5 +58,10 @@ int Platform::getPlatformSizeX()
 int Platform::getPlatformSizeY()
 {
     return 16;
+}
+
+bool Platform::isActive()
+{
+    return active;
 }
 

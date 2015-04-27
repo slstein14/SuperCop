@@ -19,7 +19,7 @@ private:
     int gameWindow, wallState;
     int wallPosX, wallPosY, firePosX, firePosY;
 
-    bool wallHasFire, wallHasEnemy;
+    bool wallHasFire, wallHasEnemy, active;
 
     enum wallType {PLAIN = 0, FIRE = 1, ENEMY = 2};
 
@@ -37,14 +37,19 @@ public:
     void setWallOnFire(bool fire);
     void setEnemyOnWall(bool enemy);
     void setWallState(enum Wall::wallType state);
+    void setActive(bool active);
 
     int getWallPosX();
     int getWallPosY();
     int getWallSizeX();
     int getWallSizeY();
+
     int getFirePosX();
     int getFirePosY();
+
     int getWallType();
+
+    bool isActive();
 };
 
 #endif // WALL_H

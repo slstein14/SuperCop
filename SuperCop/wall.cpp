@@ -7,7 +7,7 @@ Wall::Wall(QWidget *parent)
 
     gameWindow = parent->width();
     wallPosY = parent->height() - 140;
-    wallPosX = gameWindow - (gameWindow / 2);
+    wallPosX = 620;
     picX = 32;
     picY = 50;
 
@@ -17,6 +17,7 @@ Wall::Wall(QWidget *parent)
     firePosY = wallPosY - 21;
 
     wallState = 0;
+    active = false;
 }
 
 Wall::~Wall()
@@ -73,6 +74,11 @@ void Wall::setWallState(enum Wall::wallType state)
     this->wallState = state;
 }
 
+void Wall::setActive(bool active)
+{
+    this->active = active;
+}
+
 int Wall::getWallPosX()
 {
     return this->wallPosX;
@@ -117,5 +123,10 @@ int Wall::getWallType()
         return 2;
         break;
     }
+}
+
+bool Wall::isActive()
+{
+    return active;
 }
 

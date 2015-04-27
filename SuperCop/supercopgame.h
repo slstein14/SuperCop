@@ -43,8 +43,8 @@ private:
 
     Player *player;
     LevelBase *lb;
-    Platform *plat;
-    Wall *wall;
+//    Platform *plat;
+//    Wall *wall;
 
     QWidget* parent;
     QTimer *timer;
@@ -82,7 +82,6 @@ public:
     void setLastKeyPress(int keyPress);
     void setPlatformX(int x);
     void obstacleMovement();
-    void physics();
     void setVecs(QString level, int end);
     void setHighScores();
 

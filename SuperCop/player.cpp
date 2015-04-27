@@ -148,12 +148,10 @@ void Player::jump()
             case WEST:
                 imagePath = QString("../SuperCop/Images/Running/Run1_1.png");
                 changeImage(imagePath);
-                //                    posY += 10;
                 break;
             case EAST:
                 imagePath = QString("../SuperCop/Images/Running/Run0_1.png");
                 changeImage(imagePath);
-                //                    posY += 10;
                 break;
             case STAND:
                 break;
@@ -301,6 +299,7 @@ void Player::runInverted()
     {
         frame++;
         jumping = false;
+        upPressed = false;
         QString imagePath = QString("../SuperCop/Images/Running/Run1_%1.png").arg(frame);
 
         if(0 < this->getFrame() && 4 > this->getFrame())
