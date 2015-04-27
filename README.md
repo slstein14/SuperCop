@@ -8,7 +8,6 @@ Spring 2015 C++ Final Project
 <b>Features:</b>
 <ul>
 <li>Three Difficulties</li>
-<li>"Endless" Mode [?]</li>
 <li>AI</li>
-<li>1 and 2 Player modes</li>
+<li>1 Player mode</li>
 </ul>
