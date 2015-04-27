@@ -1,5 +1,6 @@
 //Alex Portolese and Sam Stein
 //This file contains the coding to make the classes interact in the game.
+
 #include "supercopgame.h"
 #include "player.h"
 #include <QGraphicsScene>
@@ -13,6 +14,7 @@
 #include <vector>
 #include <donut.h>
 #include <QRect>
+
 using namespace std;
 
 SuperCopGame::SuperCopGame(QWidget *parent) :
