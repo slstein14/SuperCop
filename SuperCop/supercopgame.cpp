@@ -353,6 +353,14 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
             (*(platforms.at(i))).drawPlatform(painter);
         }//Controls whether wall is drawn on screen
 
+        if(playerRect.intersects(platRect) && (player->getPosY() < 315) && !player->isAscending())
+        {
+            player->setPosY(270);
+            player->setJumping(false);
+            player->setOnPlatform(true);
+            player->setOnWall(false);
+            player->setOnGround(false);
+        }
     }//handles all platform objects
 
     //Platform Collision handler
@@ -395,22 +403,27 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
         }
     }
 
-    //Checks for player colliding with the left side of a wall
-    if((player->getPosY() + 40 > wallRect.top()) && (playerRect.intersects(wallRect)) && (1 == player->getPlayerDirection()))
+    for(unsigned int i = 0; i < walls.size(); i++)
     {
-        player->setPosX(player->getPosX() - 1);
-        player->setWallCollided(true);
-    }
-    //Checks for player colliding with the left side of a wall
-    else if((player->getPosY() + 40 > wallRect.top()) && (playerRect.intersects(wallRect)) && (-1 == player->getPlayerDirection()))
-    {
-        player->setPosX(player->getPosX() + 1);
-        player->setWallCollided(true);
-    }
-    //Sets flag for when player is not colliding with a wall
-    else
-    {
-        player->setWallCollided(false);
+        wallRect = QRect((*(walls.at(i))).getWallPosX(),(*(walls.at(i))).getWallPosY(),(*(walls.at(i))).getWallSizeX(),(*(walls.at(i))).getWallSizeY());
+
+        //Checks for player colliding with the left side of a wall
+        if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (1 == player->getPlayerDirection()))
+        {
+            player->setPosX((*(walls.at(i))).getWallPosX() - player->getSizeX() );
+            player->setWallCollided(true);
+        }
+        //Checks for player colliding with the left side of a wall
+        else if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (-1 == player->getPlayerDirection()))
+        {
+            player->setPosX((*(walls.at(i))).getWallPosX()+(*(walls.at(i))).getWallSizeX());
+            player->setWallCollided(true);
+        }
+        //Sets flag for when player is not colliding with a wall
+        else
+        {
+            player->setWallCollided(false);
+        }
     }
 
     //===========================================================

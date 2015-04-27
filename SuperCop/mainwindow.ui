@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>SuperCop</string>
   </property>
   <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
@@ -35,16 +35,7 @@
      <addaction name="Medium_1P"/>
      <addaction name="Hard_1P"/>
     </widget>
-    <widget class="QMenu" name="menuNew_2_Player_Game">
-     <property name="title">
-      <string>New 2 Player Game</string>
-     </property>
-     <addaction name="Easy_2P"/>
-     <addaction name="Medium_2P"/>
-     <addaction name="Hard_2P"/>
-    </widget>
     <addaction name="menuNew_1_Player_Game"/>
-    <addaction name="menuNew_2_Player_Game"/>
     <addaction name="separator"/>
     <addaction name="actionHigh_Scores"/>
     <addaction name="separator"/>

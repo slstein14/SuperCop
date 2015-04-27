@@ -24,7 +24,7 @@ private:
 
     int frame;
     int leftBound, rightBound;
-    int ground;
+    int ground, speedX;
 
     int lastActionPressed;
     int playerDirection;
@@ -56,6 +56,7 @@ public:
     void setOnWall(bool onWall);
     void setOnPlatform(bool onPlat);
     void setWallCollided(bool wallCollided);
+    void setSpeedX(int spd);
 
     int getPosX();
     int getPosY();

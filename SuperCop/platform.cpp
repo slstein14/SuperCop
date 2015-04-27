@@ -5,7 +5,7 @@ Platform::Platform(QWidget *parent)
     gameWindow = parent->width();
     platform = new QPixmap("../SuperCop/Images/Wall/0.png");
     platformHeight = parent->height() - 160;
-    platformPosX = 620;
+    platformPosX = gameWindow + 20;
     platformLength = 48;
 
     active = false;

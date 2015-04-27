@@ -16,6 +16,7 @@ Player::Player(QWidget *parent)
     frame = 0;
     lastActionPressed = 0;
     playerDirection = 1;
+    speedX = 5;
 
     leftBound = parent->width() / 5;
     rightBound = parent->width() - (parent->width() / 5);
@@ -64,11 +65,11 @@ void Player::playerScreenPos(QWidget *w = 0)
     //If on edge of rect, move camera in direction player is running
     if(1 == lastActionPressed && (this->posX + 25 < rightBound) && !wallCollided)
     {
-        this->setPosX(this->getPosX() + 5);
+        this->setPosX(this->getPosX() +speedX + 5);
     }
     else if(4 == lastActionPressed && (this->posX > leftBound) && !wallCollided)
     {
-        this->setPosX(this->getPosX() - 5);
+        this->setPosX(this->getPosX() - speedX - 5);
     }
     else
     {
@@ -178,8 +179,8 @@ void Player::roll()
             switch(playerDirection)
             {
             case WEST:
-                if((this->getPosX() - 8 >= leftBound) && !this->isWallCollided())
-                    this->setPosX(this->getPosX() - 8);
+                if((this->getPosX() - speedX - 3 >= leftBound) && !this->isWallCollided())
+                    this->setPosX(this->getPosX() - speedX - 3);
                 else
                     this->setPosX(this->getPosX());
 
@@ -187,8 +188,8 @@ void Player::roll()
                 changeImage(imagePath);
                 break;
             case EAST:
-                if((this->getPosX() + 33 < rightBound) && !this->isWallCollided())
-                    this->setPosX(this->getPosX() + 8);
+                if((this->getPosX() + speedX + 28 < rightBound) && !this->isWallCollided())
+                    this->setPosX(this->getPosX() + speedX + 3);
                 else
                     this->setPosX(this->getPosX());
 
@@ -204,8 +205,8 @@ void Player::roll()
             switch(playerDirection)
             {
             case WEST:
-                if((this->getPosX() - 3 > leftBound) && !this->isWallCollided())
-                    this->setPosX(this->getPosX() - 3);
+                if((this->getPosX() - speedX + 2 > leftBound) && !this->isWallCollided())
+                    this->setPosX(this->getPosX() - speedX + 2);
                 else
                     this->setPosX(this->getPosX());
 
@@ -213,8 +214,8 @@ void Player::roll()
                 changeImage(imagePath);
                 break;
             case EAST:
-                if((this->getPosX() + 28 < rightBound) && !this->isWallCollided())
-                    this->setPosX(this->getPosX() + 3);
+                if((this->getPosX() + speedX + 23 < rightBound) && !this->isWallCollided())
+                    this->setPosX(this->getPosX() + speedX - 2);
                 else
                     this->setPosX(this->getPosX());
 
@@ -459,6 +460,11 @@ void Player::setOnPlatform(bool onPlat)
 void Player::setWallCollided(bool wallCollided)
 {
     this->wallCollided = wallCollided;
+}
+
+void Player::setSpeedX(int spd)
+{
+    this->speedX = spd;
 }//Accessor
 
 int Player::getPosX()
