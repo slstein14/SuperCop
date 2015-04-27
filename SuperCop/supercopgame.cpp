@@ -310,6 +310,14 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
             (*(donuts.at(i))).setPosX(-10000);//Donuts may technically be reactivated by going backward, but the player cannot go back past 0, and donuts will spawn waaaay back.
             gamescore+=10;
         }//handles collisions with donut
+
+        for(unsigned int j = 0; j < walls.size(); j++){
+
+            wallRect = QRect((*(walls.at(j))).getWallPosX(),(*(walls.at(j))).getWallPosY(),(*(walls.at(j))).getWallSizeX(),(*(walls.at(j))).getWallSizeY());
+            if(donutRect.intersects(wallRect)){
+                (*(donuts.at(i))).setActive(false);
+            }
+        }//Donuts don't spawn in walls
     }//Handles all cases of donut objects.
 
     for(unsigned int i = 0; i < enemies.size(); i++)
