@@ -30,6 +30,8 @@ public:
 
     bool getActive();
     void setActive(bool act);
+    void setDirection(int direc);
+    int getDirection();
 
 private:
     int posX;
@@ -39,6 +41,7 @@ private:
     int frame;
     QPixmap *robot;
     bool active;
+    int direction;
 };
 
 #endif // ENEMY_H
