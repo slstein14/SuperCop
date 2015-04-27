@@ -2,8 +2,6 @@
 //This file contains the coding to make the player functional.
 #include "Player.h"
 #include <QDebug>
-#include <QKeyEvent>
-#include <QTimer>
 
 Player::Player(QWidget *parent)
 {

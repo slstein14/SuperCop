@@ -19,6 +19,7 @@ LevelBase::LevelBase(QWidget *parent)
 LevelBase::~LevelBase()
 {
  delete floor;
+ delete generateLevel;
 }//Destructor
 
 

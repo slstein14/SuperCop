@@ -4,27 +4,18 @@
 #ifndef SUPERCOPGAME_H
 #define SUPERCOPGAME_H
 
-
 #include "levelbase.h"
 #include "platform.h"
 #include "player.h"
 #include "wall.h"
-
 #include <QWidget>
-#include <QGraphicsItem>
-#include <QtCore>
-#include <QtGui>
-#include <QQmlEngine>
-#include <QQuickView>
 #include <QTimer>
 #include <QKeyEvent>
 #include <QPixmap>
 #include <QMessageBox>
-
 #include <enemy.h>
 #include <donut.h>
 #include <vector>
-
 using namespace std;
 
 namespace Ui {

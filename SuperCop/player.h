@@ -6,8 +6,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QWidget>
-#include <QTimer>
-#include <QKeyEvent>
+
 
 class Player : QObject
 {

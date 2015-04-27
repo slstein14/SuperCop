@@ -2,12 +2,8 @@
 //This file contains the coding to make the classes interact in the game.
 #include "supercopgame.h"
 #include "player.h"
-#include <QGraphicsScene>
-#include <QQmlComponent>
-#include <QGraphicsObject>
 #include <QKeyEvent>
 #include <QDebug>
-#include <ctime>
 #include <cstdlib>
 #include <fstream>
 #include <vector>
@@ -19,7 +15,6 @@ SuperCopGame::SuperCopGame(QWidget *parent) :
     QWidget(parent)
 {
     QWidget::setFixedSize(this->width(),this->height());
-    srand(time(0));
     player = new Player(this);
     lb = new LevelBase(this);
     msg = new QMessageBox();
