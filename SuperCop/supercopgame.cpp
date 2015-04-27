@@ -49,6 +49,7 @@ SuperCopGame::SuperCopGame(QWidget *parent) :
     lastKeyPress = 0;
     gamescore=0;
     location=0;
+    this->setVecs();
 }//Initializes game variables
 
 
@@ -314,7 +315,12 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
 
         if((*(enemies.at(i))).getActive())
         {
-            (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() - moveSpeed - 3);
+            if(1==(*(enemies.at(i))).getDirection()){
+                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() - moveSpeed - 3);
+            }
+            else if (-1==(*(enemies.at(i))).getDirection()){
+                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() + moveSpeed + 3);
+            }
             (*(enemies.at(i))).drawEnemy(painter);
         }//enemy moves based on time
 
@@ -427,29 +433,48 @@ for(unsigned int i=0;i<walls.size();i++){
             player->setOnGround(false);
         }
 
-for(unsigned int i=0;i<walls.size();i++)
-{
-	wallRect = QRect((*(walls.at(i))).getWallPosX(),(*(walls.at(i))).getWallPosY(),(*(walls.at(i))).getWallSizeX(),(*(walls.at(i))).getWallSizeY());
+	for(unsigned int i=0;i<walls.size();i++)
+	{
+		wallRect = QRect((*(walls.at(i))).getWallPosX(),(*(walls.at(i))).getWallPosY(),(*(walls.at(i))).getWallSizeX(),(*(walls.at(i))).getWallSizeY());
 
-	//Checks for player colliding with the left side of a wall
-	if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (1 == player->getPlayerDirection()))
-	{
-		player->setPosX((*(walls.at(i))).getWallPosX() - player->getSizeX() );
-		player->setWallCollided(true);
-	}
-	//Checks for player colliding with the left side of a wall
-	else if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (-1 == player->getPlayerDirection()))
-	{
-		player->setPosX((*(walls.at(i))).getWallPosX()+(*(walls.at(i))).getWallSizeX());
-		player->setWallCollided(true);
-	}
-	//Sets flag for when player is not colliding with a wall
-	else
-	{
-		player->setWallCollided(false);
+		//Checks for player colliding with the left side of a wall
+		if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (1 == player->getPlayerDirection()))
+		{
+			player->setPosX((*(walls.at(i))).getWallPosX() - player->getSizeX() );
+			player->setWallCollided(true);
+		}
+		//Checks for player colliding with the left side of a wall
+		else if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (-1 == player->getPlayerDirection()))
+		{
+			player->setPosX((*(walls.at(i))).getWallPosX()+(*(walls.at(i))).getWallSizeX());
+			player->setWallCollided(true);
+		}
+		//Sets flag for when player is not colliding with a wall
+		else
+		{
+			player->setWallCollided(false);
+		}
+		for(unsigned int i = 0; i < enemies.size(); i++)
+		{
+		    	for(unsigned int j=0;j<walls.size();j++)
+		    	{
+		        wallRect = QRect((*(walls.at(j))).getWallPosX(),(*(walls.at(j))).getWallPosY(),(*(walls.at(j))).getWallSizeX(),(*(walls.at(j))).getWallSizeY());
+	        	enemyRect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
+	
+		        if(enemyRect.intersects(wallRect)&&true==(*(walls.at(j))).getActive())
+		        {
+		            if(1==(*(enemies.at(i))).getDirection())
+		            {
+		            	(*(enemies.at(i))).setDirection(-1);
+		            }
+		            else if (-1==(*(enemies.at(i))).getDirection())
+		            {
+		                (*(enemies.at(i))).setDirection(1);
+		            }
+	        	}//Enemies turn if they hit a wall
+		}
 	}
 }
-
     //===========================================================
     //    END PHYSICS
     //===========================================================
@@ -482,10 +507,10 @@ for(unsigned int i=0;i<walls.size();i++)
 
 
 void SuperCopGame::setVecs(QString level, int end){
-    QString enemyfile("../SuperCop/" + level + "/enemy.txt");
-    QString donutfile("../SuperCop/" + level + "/donut.txt");
-    QString wallFile("../SuperCop/" + level + "/wall.txt");
-    QString platFile("../SuperCop/" + level + "/platform.txt");
+    QString enemyfile("../SuperCop/level/enemy.txt");
+    QString donutfile("../SuperCop/level/donut.txt");
+    QString wallFile("../SuperCop/level/wall.txt");
+    QString platFile("../SuperCop/level/platform.txt");
 
     //Enemy Vector initialization
     ifstream enemyread;
@@ -570,7 +595,7 @@ void SuperCopGame::setVecs(QString level, int end){
     levelEnd = new Donut(this);
     levelEnd->setSizeX(40);
     levelEnd->setSizeY(40);
-    levelEnd->setPosX(end);
+    levelEnd->setPosX(6500);
     levelEnd->setPosY(this->height()-200);
 
 
