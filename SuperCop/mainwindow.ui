@@ -10,6 +10,18 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>400</width>
+    <height>300</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>400</width>
+    <height>300</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>SuperCop</string>
   </property>
@@ -29,7 +41,7 @@
     </property>
     <widget class="QMenu" name="menuNew_1_Player_Game">
      <property name="title">
-      <string>New 1 Player Game</string>
+      <string>New Game</string>
      </property>
      <addaction name="Easy_1P"/>
      <addaction name="Medium_1P"/>

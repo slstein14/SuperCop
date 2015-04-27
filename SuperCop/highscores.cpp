@@ -14,46 +14,46 @@ HighScores::HighScores(QWidget *parent) :
     scoreset.open("../SuperCop/highscores1.txt");
     int scores;
     if(scoreset.is_open()){
-       scoreset>>scores;
-       ui->Score1_1->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score1_2->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score1_3->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score1_4->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score1_5->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score1_1->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score1_2->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score1_3->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score1_4->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score1_5->setText(QString::number(scores));
     }//reads current high scores
     scoreset.close();
 
     scoreset.open("../SuperCop/highscores2.txt");
     if(scoreset.is_open()){
-       scoreset>>scores;
-       ui->Score2_1->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score2_2->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score2_3->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score2_4->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score2_5->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score2_1->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score2_2->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score2_3->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score2_4->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score2_5->setText(QString::number(scores));
     }//reads current high scores
     scoreset.close();
 
     scoreset.open("../SuperCop/highscores3.txt");
     if(scoreset.is_open()){
-       scoreset>>scores;
-       ui->Score3_1->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score3_2->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score3_3->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score3_4->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score3_5->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score3_1->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score3_2->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score3_3->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score3_4->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score3_5->setText(QString::number(scores));
     }//reads current high scores
     scoreset.close();
 
@@ -69,19 +69,19 @@ void HighScores::on_reset_clicked()
     ofstream reset;
     reset.open("../SuperCop/highscores1.txt");
     for(int i=0;i<5;i++){
-    reset<<0<<endl;
+        reset<<0<<endl;
     }
     reset.close();
 
     reset.open("../SuperCop/highscores2.txt");
     for(int i=0;i<5;i++){
-    reset<<0<<endl;
+        reset<<0<<endl;
     }
     reset.close();
 
     reset.open("../SuperCop/highscores3.txt");
     for(int i=0;i<5;i++){
-    reset<<0<<endl;
+        reset<<0<<endl;
     }
     reset.close();
 
@@ -89,45 +89,45 @@ void HighScores::on_reset_clicked()
     scoreset.open("../SuperCop/highscores1.txt");
     int scores;
     if(scoreset.is_open()){
-       scoreset>>scores;
-       ui->Score1_1->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score1_2->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score1_3->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score1_4->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score1_5->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score1_1->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score1_2->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score1_3->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score1_4->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score1_5->setText(QString::number(scores));
     }
 
     scoreset.open("../SuperCop/highscores2.txt");
     if(scoreset.is_open()){
-       scoreset>>scores;
-       ui->Score2_1->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score2_2->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score2_3->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score2_4->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score2_5->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score2_1->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score2_2->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score2_3->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score2_4->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score2_5->setText(QString::number(scores));
     }//reads current high scores
     scoreset.close();
 
     scoreset.open("../SuperCop/highscores3.txt");
     if(scoreset.is_open()){
-       scoreset>>scores;
-       ui->Score3_1->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score3_2->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score3_3->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score3_4->setText(QString::number(scores));
-       scoreset>>scores;
-       ui->Score3_5->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score3_1->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score3_2->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score3_3->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score3_4->setText(QString::number(scores));
+        scoreset>>scores;
+        ui->Score3_5->setText(QString::number(scores));
     }//reads current high scores
     scoreset.close();
 

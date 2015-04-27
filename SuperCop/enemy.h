@@ -6,8 +6,6 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QWidget>
-#include <QPixmap>
-#include <QKeyEvent>
 
 class Enemy
 {
@@ -31,8 +29,6 @@ public:
     bool getActive();
     void setActive(bool act);
     void setDirection(int direc);
-
-    void updateEnemyDirection();
     int getDirection();
 
 private:

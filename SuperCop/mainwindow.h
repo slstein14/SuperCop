@@ -6,9 +6,7 @@
 #include "controls.h"
 #include "highscores.h"
 #include "supercopgame.h"
-
 #include <QMainWindow>
-#include <QtQuick/QQuickView>
 
 namespace Ui {
 class MainWindow;
