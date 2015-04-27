@@ -32,7 +32,7 @@ public:
 
     void drawPlayer(QPainter &painter);
     void changeImage(QString str);
-    void playerScreenPos(QWidget *w);
+    void playerScreenPos();
 
     void jump();
     void roll();

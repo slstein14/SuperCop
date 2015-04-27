@@ -71,7 +71,7 @@ int Enemy::getSizeX()
 int Enemy::getSizeY()
 {
     return sizeY;
-}
+}//Accessor
 
 bool Enemy::getActive()
 {
@@ -96,8 +96,6 @@ void Enemy::setDirection(int direc)
         break;
     }
 }//Mutator
-
-
 
 int Enemy::getDirection()
 {

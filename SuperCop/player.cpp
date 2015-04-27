@@ -41,11 +41,6 @@ Player::~Player()
 void Player::drawPlayer(QPainter &painter)
 {
     painter.drawPixmap(posX, posY, sizeX, sizeY, *image);
-
-    //For debugging purposes
-    painter.setPen(Qt::red);
-    painter.drawLine(rightBound, posY + 43, rightBound, posY - 43);
-    painter.drawLine(leftBound, posY + 43, leftBound, posY - 43);
 }//Draws the player
 
 
@@ -56,7 +51,7 @@ void Player::changeImage(QString str)
 }//Allows the player icon to be changed
 
 
-void Player::playerScreenPos(QWidget *w = 0)
+void Player::playerScreenPos()
 {
     //Check where player is on screen. If within a predefined rect, do not scroll screen.
     //If on edge of rect, move camera in direction player is running
@@ -107,7 +102,7 @@ void Player::playerAction(int action)
         break;
     }
 
-    playerScreenPos();
+    this->playerScreenPos();
 }//Calls the various player controlled movement functions
 
 
@@ -389,27 +384,27 @@ bool Player::isMoveLeft()
 bool Player::isOnGround()
 {
     return onGround;
-}
+}//Accessor
 
 bool Player::isAscending()
 {
     return ascend;
-}
+}//Accessor
 
 bool Player::isOnPlatform()
 {
     return playerOnPlatform;
-}
+}//Accessor
 
 bool Player::isOnWall()
 {
     return playerOnWall;
-}
+}//Accessor
 
 bool Player::isWallCollided()
 {
     return wallCollided;
-}
+}//Accessor
 
 void Player::setSpeedX(int spd)
 {
@@ -459,12 +454,12 @@ void Player::setOnWall(bool onWall)
 void Player::setOnPlatform(bool onPlat)
 {
     this->playerOnPlatform = onPlat;
-}
+}//Mutator
 
 void Player::setWallCollided(bool wallCollided)
 {
     this->wallCollided = wallCollided;
-}
+}//Mutator
 
 int Player::getPosX()
 {
