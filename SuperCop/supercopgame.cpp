@@ -144,10 +144,10 @@ void SuperCopGame::setLastKeyPress(int key)
     this->lastKeyPress = key;
 }//Sets key based on key presses
 
-void SuperCopGame::setPlatformX(int x)
-{
-//    plat->setPlatformPosX(x);
-}//Sets the location of the platform
+//void SuperCopGame::setPlatformX(int x)
+//{
+////    plat->setPlatformPosX(x);
+//}//Sets the location of the platform
 
 
 void SuperCopGame::obstacleMovement()
@@ -526,18 +526,19 @@ for(unsigned int i=0;i<walls.size();i++){
             pen3.setColor(Qt::red);
         }
 
-        for(unsigned int i=0;i<walls.size();i++){
+for(unsigned int i=0;i<walls.size();i++){
+            wallRect = QRect((*(walls.at(i))).getWallPosX(),(*(walls.at(i))).getWallPosY(),(*(walls.at(i))).getWallSizeX(),(*(walls.at(i))).getWallSizeY());
 
     //Checks for player colliding with the left side of a wall
         if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (1 == player->getPlayerDirection()))
         {
-            player->setPosX(player->getPosX() - 1);
+            player->setPosX((*(walls.at(i))).getWallPosX() - player->getSizeX() );
             player->setWallCollided(true);
         }
         //Checks for player colliding with the left side of a wall
         else if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (-1 == player->getPlayerDirection()))
         {
-            player->setPosX(player->getPosX() + 1);
+            player->setPosX((*(walls.at(i))).getWallPosX()+(*(walls.at(i))).getWallSizeX());
             player->setWallCollided(true);
         }
         //Sets flag for when player is not colliding with a wall
@@ -760,4 +761,5 @@ void SuperCopGame::setHighScores(){
 void SuperCopGame::setMoveSpeed(int spd)
 {
     moveSpeed = spd;
+    player->setSpeedX(spd);
 }//set movement speed;
