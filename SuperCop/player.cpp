@@ -19,7 +19,7 @@ Player::Player(QWidget *parent)
     speedX = 5;
 
     leftBound = parent->width() / 5;
-    rightBound = parent->width() - (parent->width() / 5);
+    rightBound = parent->width() - (parent->width() / 3);
     ground = parent->height() - 140;
 
     rolling = false;
