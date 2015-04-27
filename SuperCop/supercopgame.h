@@ -43,8 +43,8 @@ private:
 
     Player *player;
     LevelBase *lb;
-    Platform *plat;
-    Wall *wall;
+//    Platform *plat;
+//    Wall *wall;
 
     QWidget* parent;
     QTimer *timer;
