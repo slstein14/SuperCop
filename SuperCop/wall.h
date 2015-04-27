@@ -1,12 +1,9 @@
 #ifndef WALL_H
 #define WALL_H
 
-#include "donut.h"
-#include "enemy.h"
 #include <QPixmap>
 #include <QPainter>
 #include <QWidget>
-
 
 class Wall
 {
@@ -16,29 +13,21 @@ private:
     int picX, picY;
     int gameWindow;
     int wallPosX, wallPosY;
-
     bool  active;
-
-
 
 public:
     Wall(QWidget *parent);
-    ~Wall(); 
+    ~Wall();
 
     void drawWall(QPainter &painter);
-
     void setWallPosX(int x);
     void setWallPosY(int y);
-
     void setActive(bool active);
-
     int getWallPosX();
     int getWallPosY();
     int getWallSizeX();
     int getWallSizeY();
-
     int getWallType();
-
     bool isActive();
 };
 

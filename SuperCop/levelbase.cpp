@@ -21,10 +21,6 @@ LevelBase::~LevelBase()
  delete floor;
 }//Destructor
 
-void LevelBase::drawLevel(QPainter &painter)
-{
-    drawLevelBase(painter);
-}//Calls the various draw functions
 
 void LevelBase::drawLevelBase(QPainter &painter)
 {
@@ -35,7 +31,4 @@ void LevelBase::drawLevelBase(QPainter &painter)
     painter.fillRect(*rect, brush);
 }//Draws the floor
 
-void LevelBase::drawLevel()
-{
-    //Random Level Generation
-}
+

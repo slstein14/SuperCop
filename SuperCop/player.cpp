@@ -1,7 +1,6 @@
-    //Alex Portolese and Sam Stein
+//Alex Portolese and Sam Stein
 //This file contains the coding to make the player functional.
 #include "Player.h"
-#include "supercopgame.h"
 #include <QDebug>
 #include <QKeyEvent>
 #include <QTimer>

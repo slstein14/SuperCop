@@ -48,7 +48,6 @@ private:
     QTimer *timer;
     QTimer *keyTimer;
     QMessageBox *msg;
-    QMessageBox *pbox;
 
     int picX,picY;
     int picHeight, picWidth;

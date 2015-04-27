@@ -18,11 +18,11 @@ using namespace std;
 SuperCopGame::SuperCopGame(QWidget *parent) :
     QWidget(parent)
 {
+    QWidget::setFixedSize(this->width(),this->height());
     srand(time(0));
     player = new Player(this);
     lb = new LevelBase(this);
     msg = new QMessageBox();
-    pbox = new QMessageBox();
 
     //Sets the Game Background (Currently Temporary)
     QPixmap bkgnd("../SuperCop/Images/background_temp.jpg");
@@ -119,12 +119,12 @@ void SuperCopGame::keyPressEvent(QKeyEvent *evt)
         isLeftPressed = true;
         break;
     case Qt::Key_Escape:
-        pbox->setText("Paused");
-        pbox->exec();
+        msg->setText("Paused");
+        msg->exec();
         break;
     case Qt::Key_P:
-        pbox->setText("Paused");
-        pbox->exec();
+        msg->setText("Paused");
+        msg->exec();
         break;
     default:
         break;
@@ -289,7 +289,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
     player->drawPlayer(painter);
-    lb->drawLevel(painter);
+    lb->drawLevelBase(painter);
 
     //===========================================================
     //    START PHYSICS
