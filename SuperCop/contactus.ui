@@ -11,33 +11,40 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Contact Us</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>60</y>
-     <width>271</width>
-     <height>20</height>
+     <x>70</x>
+     <y>80</y>
+     <width>241</width>
+     <height>141</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Designed and Created By Alex Portolese and Sam Stein</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>140</y>
-     <width>261</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Graphics Courtesy of iconarchive.com</string>
-   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>               Designed and Created By</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>              Alex Portolese and Sam Stein</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>        Graphics Courtesy of iconarchive.com</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
