@@ -22,7 +22,7 @@ SuperCopGame::SuperCopGame(QWidget *parent) :
     msg = new QMessageBox();
 
     //Sets the Game Background (Currently Temporary)
-    QPixmap bkgnd("../SuperCop/Images/background_temp.jpg");
+    QPixmap bkgnd("../SuperCop/Images/background.png");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
@@ -491,10 +491,9 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
 
     //START DEBUG ITEMS
 
-//    QPen pen = QPen(Qt::red);
-//    painter.setPen(pen);
-//    painter.setFont(FONTOBJECT);
-//    painter.drawText(10, 10, QString("Score: %1").arg(QString::number(gamescore)));
+    QPen pen = QPen(Qt::white);
+    painter.setPen(pen);
+    painter.drawText(10, 10, QString("Score: %1").arg(QString::number(gamescore)));
 
     levelEnd->drawDonut(painter);
     levelEndRect = QRect(levelEnd->getPosX(),levelEnd->getPosY(),levelEnd->getSizeX(),levelEnd->getSizeY());

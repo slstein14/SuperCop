@@ -5,11 +5,10 @@
 Platform::Platform(QWidget *parent)
 {
     gameWindow = parent->width();
-    platform = new QPixmap("../SuperCop/Images/Wall/0.png");
+    platform = new QPixmap("../SuperCop/Images/Wall/Box_2.png");
     platformHeight = parent->height() - 160;
     platformPosX = gameWindow + 20;
     platformLength = 48;
-
     active = false;
 }//Initializes the variables for the platform
 
@@ -22,9 +21,7 @@ void Platform::drawPlatform(QPainter &painter)
 {
     rectPlat = new QRect(platformPosX, platformHeight, platformLength, 16);
     painter.drawRect(*rectPlat);
-    QBrush brush;
-    brush.setTexture(*platform);
-    painter.fillRect(*rectPlat, brush);
+    painter.drawTiledPixmap(*rectPlat, *platform);
 }//Draws the platform
 
 void Platform::setPlatformPosX(int x)

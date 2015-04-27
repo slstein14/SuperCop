@@ -4,14 +4,14 @@
 
 Wall::Wall(QWidget *parent)
 {
-    wall = new QPixmap("../SuperCop/Images/Wall/0.png");
+    wall = new QPixmap("../SuperCop/Images/Wall/Box_2.png");
 
     gameWindow = parent->width();
     wallPosY = parent->height() - 140;
     wallPosX = gameWindow + 50;
 
     picX = 32;
-    picY = 50;
+    picY = 40;
     active = false;
 }//Initializes the variables for the Wall
 
@@ -24,9 +24,7 @@ void Wall::drawWall(QPainter &painter)
 {
     rectWall = new QRect(wallPosX, wallPosY, picX, picY);
     painter.drawRect(*rectWall);
-    QBrush brush;
-    brush.setTexture(*wall);
-    painter.fillRect(*rectWall, brush);
+    painter.drawTiledPixmap(*rectWall, *wall);
 }//Draws the wall
 
 
