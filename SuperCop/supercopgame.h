@@ -79,7 +79,7 @@ public:
     void keyReleaseEvent(QKeyEvent *evt);
     void setLastKeyPress(int keyPress);
     void obstacleMovement();
-    void setVecs(;
+    void setVecs();
     void setHighScores();
 
     void setMoveSpeed(int spd);

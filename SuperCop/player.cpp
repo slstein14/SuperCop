@@ -468,11 +468,6 @@ void Player::setWallCollided(bool wallCollided)
     this->wallCollided = wallCollided;
 }
 
-void Player::setSpeedX(int spd)
-{
-    this->speedX = spd;
-}//Accessor
-
 int Player::getPosX()
 {
     return posX;

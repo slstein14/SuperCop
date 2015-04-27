@@ -78,7 +78,7 @@ public:
     bool isOnPlatform();
     bool isOnWall();
     bool isWallCollided();
-    void setSpeedX(int spd);
+//    void setSpeedX(int spd);
 
 public slots:
     void playerAction(int action);

@@ -63,10 +63,4 @@ int Platform::getPlatformSizeY()
 bool Platform::isActive()
 {
     return active;
-}
-
-
-bool Platform::getActive()
-{
-    return active;
 }//Mutator

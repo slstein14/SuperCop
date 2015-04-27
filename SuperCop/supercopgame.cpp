@@ -390,7 +390,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
         player->setOnWall(false);
         player->setOnGround(false);
     }
-}
+
     //Wall Collison handler
 for(unsigned int i=0;i<walls.size();i++){
 
@@ -400,7 +400,7 @@ for(unsigned int i=0;i<walls.size();i++){
         (*(walls.at(i))).setActive(true);
     }//spawns a wall at each read location
 
-    if(true==(*(walls.at(i))).getActive()){
+    if(true==(*(walls.at(i))).isActive()){
         (*(walls.at(i))).drawWall(painter);
     }//Controls whether wall is painted
 
@@ -461,7 +461,7 @@ for(unsigned int i=0;i<walls.size();i++){
 		        wallRect = QRect((*(walls.at(j))).getWallPosX(),(*(walls.at(j))).getWallPosY(),(*(walls.at(j))).getWallSizeX(),(*(walls.at(j))).getWallSizeY());
 	        	enemyRect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
 	
-		        if(enemyRect.intersects(wallRect)&&true==(*(walls.at(j))).getActive())
+                if(enemyRect.intersects(wallRect)&&true==(*(walls.at(j))).isActive())
 		        {
 		            if(1==(*(enemies.at(i))).getDirection())
 		            {
@@ -506,7 +506,7 @@ for(unsigned int i=0;i<walls.size();i++){
 }//Handles Painting all elements on screen
 
 
-void SuperCopGame::setVecs(QString level, int end){
+void SuperCopGame::setVecs(){
     QString enemyfile("../SuperCop/level/enemy.txt");
     QString donutfile("../SuperCop/level/donut.txt");
     QString wallFile("../SuperCop/level/wall.txt");
