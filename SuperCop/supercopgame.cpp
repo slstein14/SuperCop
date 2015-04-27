@@ -467,9 +467,9 @@ for(unsigned int i=0;i<platforms.size();i++){
     }//Controls whether platform is painted
 
 
-    if(playerRect.intersects(platRect) && (player->getPosY() < 285) && !player->isAscending())
+    if(playerRect.intersects(platRect) && (player->getPosY() < 315) && !player->isAscending())
     {
-        player->setPosY(280);
+        player->setPosY(270);
         player->setJumping(false);
         player->setOnPlatform(true);
         player->setOnWall(false);
@@ -491,9 +491,9 @@ for(unsigned int i=0;i<walls.size();i++){
         (*(walls.at(i))).drawWall(painter);
     }//Controls whether wall is painted
 
-    if(playerRect.intersects(wallRect) && (player->getPosY() < 305) && !player->isAscending())
+    if(playerRect.intersects(wallRect) && (player->getPosY() < 340) && !player->isAscending())
     {
-        player->setPosY(300);
+        player->setPosY(290);
         player->setJumping(false);
         player->setOnPlatform(false);
         player->setOnWall(true);
@@ -502,7 +502,7 @@ for(unsigned int i=0;i<walls.size();i++){
         pen3.setColor(Qt::green);
     }
     //Ground Collision handler
-
+}
 
         if((player->getPosY() >= player->getGround()) && !player->isAscending() && !player->isOnWall() && !player->isOnPlatform())
         {
@@ -526,6 +526,7 @@ for(unsigned int i=0;i<walls.size();i++){
             pen3.setColor(Qt::red);
         }
 
+        for(unsigned int i=0;i<walls.size();i++){
 
     //Checks for player colliding with the left side of a wall
         if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (1 == player->getPlayerDirection()))
