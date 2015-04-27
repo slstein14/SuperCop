@@ -7,7 +7,7 @@
 Enemy::Enemy(QWidget *parent)
 {
 
-    posX = 620;
+    posX = parent->width() ;
     posY = parent->height() - 140;
     sizeX = 40;
     sizeY = 40;

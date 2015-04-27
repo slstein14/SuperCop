@@ -308,6 +308,25 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     {
         enemyRect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
 
+        for(unsigned int i = 0; i < enemies.size(); i++)
+        {
+                for(unsigned int j=0;j<walls.size();j++)
+                {
+                wallRect = QRect((*(walls.at(j))).getWallPosX(),(*(walls.at(j))).getWallPosY(),(*(walls.at(j))).getWallSizeX(),(*(walls.at(j))).getWallSizeY());
+                enemyRect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
+
+                if(enemyRect.intersects(wallRect) && (*(walls.at(j))).isActive())
+                {
+                    if(1==(*(enemies.at(i))).getDirection())
+                    {
+                        (*(enemies.at(i))).setDirection(0);
+                    }
+                    else if (-1==(*(enemies.at(i))).getDirection())
+                    {
+                        (*(enemies.at(i))).setDirection(1);
+                    }
+                }//Enemies turn if they hit a wall
+
         if(enemyspawn.at(i)==location)
         {
             (*(enemies.at(i))).setActive(true);
@@ -400,7 +419,8 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
             (*(walls.at(i))).setActive(true);
         }//spawns a wall at each read location
 
-        if(true==(*(walls.at(i))).isActive()){
+        if((*(walls.at(i))).isActive())
+        {
             (*(walls.at(i))).drawWall(painter);
         }//Controls whether wall is painted
 
@@ -427,7 +447,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     else
     {
         player->setPosY(player->getPosY() + 10);
-        player->setJumping(true);
+//        player->setJumping(true);
         player->setOnPlatform(false);
         player->setOnWall(false);
         player->setOnGround(false);
@@ -455,24 +475,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
 			player->setWallCollided(false);
 		}
 
-		for(unsigned int i = 0; i < enemies.size(); i++)
-		{
-		    	for(unsigned int j=0;j<walls.size();j++)
-		    	{
-		        wallRect = QRect((*(walls.at(j))).getWallPosX(),(*(walls.at(j))).getWallPosY(),(*(walls.at(j))).getWallSizeX(),(*(walls.at(j))).getWallSizeY());
-	        	enemyRect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
-	
-                if(enemyRect.intersects(wallRect) && (*(walls.at(j))).isActive())
-		        {
-		            if(1==(*(enemies.at(i))).getDirection())
-		            {
-                        (*(enemies.at(i))).setDirection(0);
-		            }
-		            else if (-1==(*(enemies.at(i))).getDirection())
-		            {
-                        (*(enemies.at(i))).setDirection(1);
-		            }
-	        	}//Enemies turn if they hit a wall
+
 		}
 	}
 }
