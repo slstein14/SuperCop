@@ -69,12 +69,10 @@ void MainWindow::on_Easy_1P_triggered()
     if(scg == NULL)
     {
         scg = new SuperCopGame();
-        scg->setVecs("Level1",6500);
         scg->setMoveSpeed(5);
     }else{
         delete scg;
         scg = new SuperCopGame();
-        scg->setVecs("Level1",6500);
         scg->setMoveSpeed(5);
     }
     scg->show();
@@ -85,12 +83,10 @@ void MainWindow::on_Medium_1P_triggered()
     if(scg == NULL)
     {
         scg = new SuperCopGame();
-        scg->setVecs("Level1",6500);
         scg->setMoveSpeed(10);
     }else{
         delete scg;
         scg = new SuperCopGame();
-        scg->setVecs("Level1",6500);
         scg->setMoveSpeed(10);
      }
      scg->show();
@@ -102,12 +98,10 @@ void MainWindow::on_Hard_1P_triggered()
     if(scg == NULL)
     {
         scg = new SuperCopGame();
-        scg->setVecs("Level1",6500);
         scg->setMoveSpeed(15);
     }else{
         delete scg;
         scg = new SuperCopGame();
-        scg->setVecs("Level1",6500);
         scg->setMoveSpeed(15);
     }
     scg->show();
