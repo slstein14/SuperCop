@@ -13,6 +13,7 @@ Enemy::Enemy(QWidget *parent)
     sizeY = 40;
     robot = new QPixmap("../SuperCop/Images/Robot/robot.png");
     active=false;
+    direction=1;
 }//initializes the enemy variables
 
 Enemy::~Enemy()
@@ -81,4 +82,14 @@ bool Enemy::getActive()
 void Enemy::setActive(bool act)
 {
     active=act;
+}//Accessor
+
+void Enemy::setDirection(int direc)
+{
+    direction=direc;
+}//Mutator
+
+int Enemy::getDirection()
+{
+    return direction;
 }//Accessor
