@@ -2,12 +2,8 @@
 //This file contains the coding to make the classes interact in the game.
 #include "supercopgame.h"
 #include "player.h"
-#include <QGraphicsScene>
-#include <QQmlComponent>
-#include <QGraphicsObject>
 #include <QKeyEvent>
 #include <QDebug>
-#include <ctime>
 #include <cstdlib>
 #include <fstream>
 #include <vector>
@@ -18,11 +14,10 @@ using namespace std;
 SuperCopGame::SuperCopGame(QWidget *parent) :
     QWidget(parent)
 {
-    srand(time(0));
+    QWidget::setFixedSize(this->width(),this->height());
     player = new Player(this);
     lb = new LevelBase(this);
     msg = new QMessageBox();
-    pbox = new QMessageBox();
 
     //Sets the Game Background (Currently Temporary)
     QPixmap bkgnd("../SuperCop/Images/background_temp.jpg");
@@ -119,12 +114,12 @@ void SuperCopGame::keyPressEvent(QKeyEvent *evt)
         isLeftPressed = true;
         break;
     case Qt::Key_Escape:
-        pbox->setText("Paused");
-        pbox->exec();
+        msg->setText("Paused");
+        msg->exec();
         break;
     case Qt::Key_P:
-        pbox->setText("Paused");
-        pbox->exec();
+        msg->setText("Paused");
+        msg->exec();
         break;
     default:
         break;
@@ -289,7 +284,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
     player->drawPlayer(painter);
-    lb->drawLevel(painter);
+    lb->drawLevelBase(painter);
 
     //===========================================================
     //    START PHYSICS

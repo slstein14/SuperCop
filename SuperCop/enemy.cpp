@@ -1,7 +1,6 @@
 //Alex Portolese and Sam Stein
 //This file contains the coding to make the enemies functional.
 #include "enemy.h"
-#include "supercopgame.h"
 #include <QDebug>
 
 Enemy::Enemy(QWidget *parent)

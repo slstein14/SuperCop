@@ -6,8 +6,6 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QWidget>
-#include <QPixmap>
-#include <QKeyEvent>
 
 class Enemy
 {

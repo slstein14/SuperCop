@@ -25,6 +25,9 @@
   <property name="windowTitle">
    <string>SuperCop</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
  </widget>
  <resources/>
  <connections/>

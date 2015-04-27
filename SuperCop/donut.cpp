@@ -1,7 +1,6 @@
 //Alex Portolese and Sam Stein
 //This file contains the coding to make the Donut item functional.
 #include "donut.h"
-#include "supercopgame.h"
 #include <QDebug>
 
 Donut::Donut(QWidget *parent)
