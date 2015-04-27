@@ -308,17 +308,17 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     {
         enemyRect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
 
-        for(unsigned int j=0;j<walls.size();j++)
+        for(unsigned int j = 0; j < walls.size(); j++)
         {
             wallRect = QRect((*(walls.at(j))).getWallPosX(),(*(walls.at(j))).getWallPosY(),(*(walls.at(j))).getWallSizeX(),(*(walls.at(j))).getWallSizeY());
 
             if(enemyRect.intersects(wallRect) && (*(walls.at(j))).isActive())
             {
-                if(1==(*(enemies.at(i))).getDirection())
+                if(1 == (*(enemies.at(i))).getDirection())
                 {
                     (*(enemies.at(i))).setDirection(0);
                 }
-                else if (-1==(*(enemies.at(i))).getDirection())
+                else if (0 == (*(enemies.at(i))).getDirection())
                 {
                     (*(enemies.at(i))).setDirection(1);
                 }
@@ -336,7 +336,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
             {
                 (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() - moveSpeed - 3);
             }
-            else if (-1 == (*(enemies.at(i))).getDirection())
+            else if (0 == (*(enemies.at(i))).getDirection())
             {
                 (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() + moveSpeed + 3);
             }
