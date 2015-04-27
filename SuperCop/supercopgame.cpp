@@ -21,10 +21,10 @@ SuperCopGame::SuperCopGame(QWidget *parent) :
 
     //Sets the Game Background (Currently Temporary)
     QPixmap bkgnd("../SuperCop/Images/background_temp.jpg");
-        bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
-        QPalette palette;
-        palette.setBrush(QPalette::Background, bkgnd);
-        this->setPalette(palette);
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, bkgnd);
+    this->setPalette(palette);
 
     timer = new QTimer();
     timer->setInterval(50);
@@ -454,33 +454,33 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     else
     {
         player->setPosY(player->getPosY() + 10);
-//        player->setJumping(true);
+        //        player->setJumping(true);
         player->setOnPlatform(false);
         player->setOnWall(false);
         player->setOnGround(false);
     }
 
-	for(unsigned int i=0;i<walls.size();i++)
-	{
-		wallRect = QRect((*(walls.at(i))).getWallPosX(),(*(walls.at(i))).getWallPosY(),(*(walls.at(i))).getWallSizeX(),(*(walls.at(i))).getWallSizeY());
+    for(unsigned int i=0;i<walls.size();i++)
+    {
+        wallRect = QRect((*(walls.at(i))).getWallPosX(),(*(walls.at(i))).getWallPosY(),(*(walls.at(i))).getWallSizeX(),(*(walls.at(i))).getWallSizeY());
 
-		//Checks for player colliding with the left side of a wall
-		if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (1 == player->getPlayerDirection()))
-		{
-			player->setPosX((*(walls.at(i))).getWallPosX() - player->getSizeX() );
-			player->setWallCollided(true);
-		}
-		//Checks for player colliding with the left side of a wall
-		else if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (-1 == player->getPlayerDirection()))
-		{
-			player->setPosX((*(walls.at(i))).getWallPosX()+(*(walls.at(i))).getWallSizeX());
-			player->setWallCollided(true);
-		}
-		//Sets flag for when player is not colliding with a wall
-		else
-		{
-			player->setWallCollided(false);
-		}
+        //Checks for player colliding with the left side of a wall
+        if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (1 == player->getPlayerDirection()))
+        {
+            player->setPosX((*(walls.at(i))).getWallPosX() - player->getSizeX() );
+            player->setWallCollided(true);
+        }
+        //Checks for player colliding with the left side of a wall
+        else if((player->getPosY() + 40 > (*(walls.at(i))).getWallPosY()) && (playerRect.intersects(wallRect)) && (-1 == player->getPlayerDirection()))
+        {
+            player->setPosX((*(walls.at(i))).getWallPosX()+(*(walls.at(i))).getWallSizeX());
+            player->setWallCollided(true);
+        }
+        //Sets flag for when player is not colliding with a wall
+        else
+        {
+            player->setWallCollided(false);
+        }
     }
 
     //===========================================================
@@ -532,7 +532,7 @@ void SuperCopGame::setVecs(){
         }
     }
     enemyread.close();
-	
+
     for(unsigned int i = 0; i < enemyspawn.size(); i++)
     {
         Enemy *enemy;
@@ -619,65 +619,65 @@ void SuperCopGame::setHighScores(){
 
     if(scoreset.is_open()){
 
-       scoreset >> scores;
-       int firstscore = scores;
-       scoreset >> scores;
-       int secondscore = scores;
-       scoreset >> scores;
-       int thirdscore = scores;
-       scoreset >> scores;
-       int fourthscore = scores;
-       scoreset >> scores;
-       int fifthscore = scores;
-       scoreset.close();
+        scoreset >> scores;
+        int firstscore = scores;
+        scoreset >> scores;
+        int secondscore = scores;
+        scoreset >> scores;
+        int thirdscore = scores;
+        scoreset >> scores;
+        int fourthscore = scores;
+        scoreset >> scores;
+        int fifthscore = scores;
+        scoreset.close();
 
-       if(firstscore < gamescore)
-       {
-             fifthscore = fourthscore;
-             fourthscore = thirdscore;
-             thirdscore = secondscore;
-             secondscore = firstscore;
-             firstscore = gamescore;
+        if(firstscore < gamescore)
+        {
+            fifthscore = fourthscore;
+            fourthscore = thirdscore;
+            thirdscore = secondscore;
+            secondscore = firstscore;
+            firstscore = gamescore;
 
-             QMessageBox sbox;
-             sbox.setText("New High Score: "+ QString::number(gamescore));
-             sbox.exec();
-       }
-       else if(secondscore < gamescore)
-       {
-              fifthscore = fourthscore;
-              fourthscore = thirdscore;
-              thirdscore = secondscore;
-              secondscore = gamescore;
-       }
-       else if(thirdscore < gamescore)
-       {
-              fifthscore = fourthscore;
-              fourthscore = thirdscore;
-              thirdscore = gamescore;
-       }
-       else if(fourthscore < gamescore)
-       {
-              fifthscore = fourthscore;
-              fourthscore = gamescore;
-       }
-       else if(fifthscore<gamescore)
+            QMessageBox sbox;
+            sbox.setText("New High Score: "+ QString::number(gamescore));
+            sbox.exec();
+        }
+        else if(secondscore < gamescore)
+        {
+            fifthscore = fourthscore;
+            fourthscore = thirdscore;
+            thirdscore = secondscore;
+            secondscore = gamescore;
+        }
+        else if(thirdscore < gamescore)
+        {
+            fifthscore = fourthscore;
+            fourthscore = thirdscore;
+            thirdscore = gamescore;
+        }
+        else if(fourthscore < gamescore)
+        {
+            fifthscore = fourthscore;
+            fourthscore = gamescore;
+        }
+        else if(fifthscore<gamescore)
 
-       {
-              fifthscore = gamescore;
-       }
+        {
+            fifthscore = gamescore;
+        }
 
-       ofstream setscores;
-       setscores.open(filename.toStdString().c_str());
+        ofstream setscores;
+        setscores.open(filename.toStdString().c_str());
 
-       setscores << firstscore << endl;
-       setscores << secondscore << endl;
-       setscores << thirdscore << endl;
-       setscores << fourthscore << endl;
-       setscores << fifthscore << endl;
+        setscores << firstscore << endl;
+        setscores << secondscore << endl;
+        setscores << thirdscore << endl;
+        setscores << fourthscore << endl;
+        setscores << fifthscore << endl;
 
-       setscores.close();
-       }
+        setscores.close();
+    }
 }//resets high scores if new high score acheived
 
 

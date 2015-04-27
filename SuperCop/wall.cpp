@@ -9,7 +9,7 @@ Wall::Wall(QWidget *parent)
     wallPosX = gameWindow + 50;
 
     picX = 32;
-    picY = 50;    
+    picY = 50;
     active = false;
 }
 

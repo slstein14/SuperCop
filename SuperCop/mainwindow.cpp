@@ -10,14 +10,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     QPixmap bkgnd("../SuperCop/Images/SuperCop.png");
-        bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
-        QPalette palette;
-        palette.setBrush(QPalette::Background, bkgnd);
-        this->setPalette(palette);
-        contact = NULL;
-        controls = NULL;
-        hScore = NULL;
-        scg = NULL;
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, bkgnd);
+    this->setPalette(palette);
+    contact = NULL;
+    controls = NULL;
+    hScore = NULL;
+    scg = NULL;
 
 }//Sets the background image for the main menu
 
@@ -88,8 +88,8 @@ void MainWindow::on_Medium_1P_triggered()
         delete scg;
         scg = new SuperCopGame();
         scg->setMoveSpeed(10);
-     }
-     scg->show();
+    }
+    scg->show();
 
 }//Creates a 1 player game on medium
 
