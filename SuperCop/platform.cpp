@@ -5,8 +5,9 @@ Platform::Platform(QWidget *parent)
     gameWindow = parent->width();
     platform = new QPixmap("../SuperCop/Images/Wall/0.png");
     platformHeight = parent->height() - 160;
-    platformPosX = gameWindow - (gameWindow / 6);
+    platformPosX = gameWindow +20;
     platformLength = 48;
+    active=false;
 }
 
 Platform::~Platform()
@@ -52,4 +53,14 @@ int Platform::getPlatformSizeY()
 {
     return 16;
 }
+
+bool Platform::getActive()
+{
+    return active;
+}//Mutator
+
+void Platform::setActive(bool act)
+{
+    active=act;
+}//Accessor
 

@@ -14,6 +14,7 @@ private:
     int picX, picY;
     int platformHeight, platformPosX, platformLength;
     int gameWindow;
+    bool active;
 
 public:
     Platform(QWidget *parent = 0);
@@ -27,6 +28,8 @@ public:
     int getPlatformEnd();
     int getPlatformSizeX();
     int getPlatformSizeY();
+    bool getActive();
+    void setActive(bool act);
 };
 
 #endif // PLATFORM_H
