@@ -308,36 +308,36 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     {
         enemyRect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
 
-        for(unsigned int i = 0; i < enemies.size(); i++)
+        for(unsigned int j=0;j<walls.size();j++)
         {
-                for(unsigned int j=0;j<walls.size();j++)
-                {
-                wallRect = QRect((*(walls.at(j))).getWallPosX(),(*(walls.at(j))).getWallPosY(),(*(walls.at(j))).getWallSizeX(),(*(walls.at(j))).getWallSizeY());
-                enemyRect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
+            wallRect = QRect((*(walls.at(j))).getWallPosX(),(*(walls.at(j))).getWallPosY(),(*(walls.at(j))).getWallSizeX(),(*(walls.at(j))).getWallSizeY());
 
-                if(enemyRect.intersects(wallRect) && (*(walls.at(j))).isActive())
+            if(enemyRect.intersects(wallRect) && (*(walls.at(j))).isActive())
+            {
+                if(1==(*(enemies.at(i))).getDirection())
                 {
-                    if(1==(*(enemies.at(i))).getDirection())
-                    {
-                        (*(enemies.at(i))).setDirection(0);
-                    }
-                    else if (-1==(*(enemies.at(i))).getDirection())
-                    {
-                        (*(enemies.at(i))).setDirection(1);
-                    }
-                }//Enemies turn if they hit a wall
+                    (*(enemies.at(i))).setDirection(0);
+                }
+                else if (-1==(*(enemies.at(i))).getDirection())
+                {
+                    (*(enemies.at(i))).setDirection(1);
+                }
+            }//Enemies turn if they hit a wall
+        }
 
-        if(enemyspawn.at(i)==location)
+        if(enemyspawn.at(i) == location)
         {
             (*(enemies.at(i))).setActive(true);
         }//spawns an enemy at each read location
 
         if((*(enemies.at(i))).getActive())
         {
-            if(1==(*(enemies.at(i))).getDirection()){
+            if(1 == (*(enemies.at(i))).getDirection())
+            {
                 (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() - moveSpeed - 3);
             }
-            else if (-1==(*(enemies.at(i))).getDirection()){
+            else if (-1 == (*(enemies.at(i))).getDirection())
+            {
                 (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() + moveSpeed + 3);
             }
             (*(enemies.at(i))).drawEnemy(painter);
@@ -474,11 +474,8 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
 		{
 			player->setWallCollided(false);
 		}
+    }
 
-
-		}
-	}
-}
     //===========================================================
     //    END PHYSICS
     //===========================================================
