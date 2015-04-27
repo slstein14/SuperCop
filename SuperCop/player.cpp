@@ -1,4 +1,4 @@
-//Alex Portolese and Sam Stein
+    //Alex Portolese and Sam Stein
 //This file contains the coding to make the player functional.
 #include "Player.h"
 #include "supercopgame.h"
@@ -32,7 +32,6 @@ Player::Player(QWidget *parent)
     onGround = true;
     upPressed = false;
     wallCollided = false;
-    speedX=5;
 
 }//initializes the player variables
 
@@ -70,7 +69,7 @@ void Player::playerScreenPos(QWidget *w = 0)
     }
     else if(4 == lastActionPressed && (this->posX > leftBound) && !wallCollided)
     {
-        this->setPosX(this->getPosX() - speedX -5);
+        this->setPosX(this->getPosX() - speedX - 5);
     }
     else
     {
@@ -253,6 +252,7 @@ void Player::run()
             frame = frame;
             upPressed = true;
         }
+
         jump();
     }
     else
@@ -328,6 +328,7 @@ void Player::standBy()
     {
         changeImage("../SuperCop/Images/Running/Run0_1.png");
     }
+
     if(-1 == playerDirection)
     {
         changeImage("../SuperCop/Images/Running/Run1_1.png");

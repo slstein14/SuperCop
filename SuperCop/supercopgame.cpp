@@ -392,46 +392,46 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     }
 
     //Wall Collison handler
-for(unsigned int i=0;i<walls.size();i++){
-
-    wallRect = QRect((*(walls.at(i))).getWallPosX(),(*(walls.at(i))).getWallPosY(),(*(walls.at(i))).getWallSizeX(),(*(walls.at(i))).getWallSizeY());
-
-    if(wallSpawn.at(i)==location){
-        (*(walls.at(i))).setActive(true);
-    }//spawns a wall at each read location
-
-    if(true==(*(walls.at(i))).isActive()){
-        (*(walls.at(i))).drawWall(painter);
-    }//Controls whether wall is painted
-
-    if(playerRect.intersects(wallRect) && (player->getPosY() < 340) && !player->isAscending())
+    for(unsigned int i=0;i<walls.size();i++)
     {
-        player->setPosY(290);
-        player->setJumping(false);
-        player->setOnPlatform(false);
-        player->setOnWall(true);
-        player->setOnGround(false);
-    }
-    //Ground Collision handler
-}
+        wallRect = QRect((*(walls.at(i))).getWallPosX(),(*(walls.at(i))).getWallPosY(),(*(walls.at(i))).getWallSizeX(),(*(walls.at(i))).getWallSizeY());
 
-        if((player->getPosY() >= player->getGround()) && !player->isAscending() && !player->isOnWall() && !player->isOnPlatform())
+        if(wallSpawn.at(i)==location){
+            (*(walls.at(i))).setActive(true);
+        }//spawns a wall at each read location
+
+        if(true==(*(walls.at(i))).isActive()){
+            (*(walls.at(i))).drawWall(painter);
+        }//Controls whether wall is painted
+
+        if(playerRect.intersects(wallRect) && (player->getPosY() < 340) && !player->isAscending())
         {
-            player->setPosY(player->getGround());
+            player->setPosY(290);
             player->setJumping(false);
             player->setOnPlatform(false);
-            player->setOnWall(false);
-            player->setOnGround(true);
-        }
-        //Lower Player until collision occurs
-        else
-        {
-            player->setPosY(player->getPosY() + 10);
-            player->setJumping(true);
-            player->setOnPlatform(false);
-            player->setOnWall(false);
+            player->setOnWall(true);
             player->setOnGround(false);
         }
+        //Ground Collision handler
+    }
+
+    if((player->getPosY() >= player->getGround()) && !player->isAscending() && !player->isOnWall() && !player->isOnPlatform())
+    {
+        player->setPosY(player->getGround());
+        player->setJumping(false);
+        player->setOnPlatform(false);
+        player->setOnWall(false);
+        player->setOnGround(true);
+    }
+    //Lower Player until collision occurs
+    else
+    {
+        player->setPosY(player->getPosY() + 10);
+        player->setJumping(true);
+        player->setOnPlatform(false);
+        player->setOnWall(false);
+        player->setOnGround(false);
+    }
 
 	for(unsigned int i=0;i<walls.size();i++)
 	{
@@ -454,6 +454,7 @@ for(unsigned int i=0;i<walls.size();i++){
 		{
 			player->setWallCollided(false);
 		}
+
 		for(unsigned int i = 0; i < enemies.size(); i++)
 		{
 		    	for(unsigned int j=0;j<walls.size();j++)
@@ -461,15 +462,15 @@ for(unsigned int i=0;i<walls.size();i++){
 		        wallRect = QRect((*(walls.at(j))).getWallPosX(),(*(walls.at(j))).getWallPosY(),(*(walls.at(j))).getWallSizeX(),(*(walls.at(j))).getWallSizeY());
 	        	enemyRect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
 	
-                if(enemyRect.intersects(wallRect)&&true==(*(walls.at(j))).isActive())
+                if(enemyRect.intersects(wallRect) && (*(walls.at(j))).isActive())
 		        {
 		            if(1==(*(enemies.at(i))).getDirection())
 		            {
-		            	(*(enemies.at(i))).setDirection(-1);
+                        (*(enemies.at(i))).setDirection(0);
 		            }
 		            else if (-1==(*(enemies.at(i))).getDirection())
 		            {
-		                (*(enemies.at(i))).setDirection(1);
+                        (*(enemies.at(i))).setDirection(1);
 		            }
 	        	}//Enemies turn if they hit a wall
 		}

@@ -31,6 +31,8 @@ public:
     bool getActive();
     void setActive(bool act);
     void setDirection(int direc);
+
+    void updateEnemyDirection();
     int getDirection();
 
 private:
@@ -42,6 +44,8 @@ private:
     QPixmap *robot;
     bool active;
     int direction;
+
+    enum enemyDirection {LEFT = 0, RIGHT = 1};
 };
 
 #endif // ENEMY_H

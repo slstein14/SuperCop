@@ -11,7 +11,7 @@ Enemy::Enemy(QWidget *parent)
     posY = parent->height() - 140;
     sizeX = 40;
     sizeY = 40;
-    robot = new QPixmap("../SuperCop/Images/Robot/robot.png");
+    robot = new QPixmap("../SuperCop/Images/Enemy/enemy0.png");
     active=false;
     direction=1;
 }//initializes the enemy variables
@@ -88,6 +88,19 @@ void Enemy::setDirection(int direc)
 {
     direction=direc;
 }//Mutator
+
+void Enemy::updateEnemyDirection()
+{
+    switch(direction)
+    {
+    case LEFT:
+        changeImage("../SuperCop/Images/Enemy/enemy0.png");
+        break;
+    case RIGHT:
+        changeImage("../SuperCop/Images/Enemy/enemy1.png");
+        break;
+    }
+}
 
 int Enemy::getDirection()
 {
