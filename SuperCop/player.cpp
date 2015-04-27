@@ -84,7 +84,7 @@ void Player::playerAction(int action)
         {
             frame = 0;
         }
-            lastActionPressed = action;
+        lastActionPressed = action;
     }
 
     //Checks which direction is being called then runs the appropriate function
@@ -168,7 +168,7 @@ void Player::roll()
     frame++;
 
     if(0 < this->getFrame() && 9 > this->getFrame())
-    {    
+    {
         QString imagePath;
         rolling = true;
         if(0 < this->getFrame() && 4 > this->getFrame())
@@ -474,13 +474,13 @@ int Player::getPosX()
 
 int Player::getPosY()
 {
-   return posY;
+    return posY;
 }//Accessor
 
 
 int Player::getSizeX()
 {
-  return sizeX;
+    return sizeX;
 }//Accessor
 
 
