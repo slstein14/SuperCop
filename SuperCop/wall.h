@@ -14,7 +14,6 @@ private:
     QPixmap *wall;
     QPixmap *fire;
     QRect *rectWall;
-//    QWidget *par;
     int picX, picY, firePicX, firePicY;
     int gameWindow, wallState;
     int wallPosX, wallPosY, firePosX, firePosY;

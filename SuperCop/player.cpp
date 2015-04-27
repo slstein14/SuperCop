@@ -32,6 +32,7 @@ Player::Player(QWidget *parent)
     onGround = true;
     upPressed = false;
     wallCollided = false;
+    speedX=5;
 
 }//initializes the player variables
 
@@ -65,11 +66,11 @@ void Player::playerScreenPos(QWidget *w = 0)
     //If on edge of rect, move camera in direction player is running
     if(1 == lastActionPressed && (this->posX + 25 < rightBound) && !wallCollided)
     {
-        this->setPosX(this->getPosX() +speedX + 5);
+        this->setPosX(this->getPosX() + speedX + 5);
     }
     else if(4 == lastActionPressed && (this->posX > leftBound) && !wallCollided)
     {
-        this->setPosX(this->getPosX() - speedX - 5);
+        this->setPosX(this->getPosX() - speedX -5);
     }
     else
     {
@@ -410,6 +411,11 @@ bool Player::isOnWall()
 bool Player::isWallCollided()
 {
     return wallCollided;
+}
+
+void Player::setSpeedX(int spd)
+{
+    speedX=spd;
 }//Accessor
 
 void Player::setPosX(int x)

@@ -80,7 +80,7 @@ public:
     void keyPressEvent(QKeyEvent *evt);
     void keyReleaseEvent(QKeyEvent *evt);
     void setLastKeyPress(int keyPress);
-    void setPlatformX(int x);
+//    void setPlatformX(int x);
     void obstacleMovement();
     void setVecs(QString level, int end);
     void setHighScores();

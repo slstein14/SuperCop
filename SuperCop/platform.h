@@ -14,7 +14,6 @@ private:
     int picX, picY;
     int platformHeight, platformPosX, platformLength;
     int gameWindow;
-
     bool active;
 
 public:
@@ -30,7 +29,6 @@ public:
     int getPlatformEnd();
     int getPlatformSizeX();
     int getPlatformSizeY();
-
     bool isActive();
 };
 

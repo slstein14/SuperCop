@@ -8,6 +8,7 @@ Wall::Wall(QWidget *parent)
     gameWindow = parent->width();
     wallPosY = parent->height() - 140;
     wallPosX = gameWindow + 20;
+
     picX = 32;
     picY = 50;
 
