@@ -31,8 +31,6 @@ public:
     bool getActive();
     void setActive(bool act);
     void setDirection(int direc);
-
-    void updateEnemyDirection();
     int getDirection();
 
 private:

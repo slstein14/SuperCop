@@ -161,6 +161,20 @@ void SuperCopGame::setLastKeyPress(int key)
 
 void SuperCopGame::obstacleMovement()
 {
+    for(unsigned int i = 0; i < enemies.size(); i++)
+    {
+        if((*(enemies.at(i))).getActive())
+        {
+            if(1 == (*(enemies.at(i))).getDirection())
+            {
+                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() - moveSpeed - 3);
+            }
+            else if (0 == (*(enemies.at(i))).getDirection())
+            {
+                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() + moveSpeed + 3);
+            }
+        }//enemy moves based on time
+    }
     if((1 == lastKeyPress || 2 == lastKeyPress) && (player->getPosX() + player->getSizeX()) >= player->getRightBound()&& levelEnd->getPosX() >= 0)
     {
         for(unsigned int i = 0; i < platforms.size(); i++)
@@ -314,16 +328,22 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
 
             if(enemyRect.intersects(wallRect) && (*(walls.at(j))).isActive())
             {
-                if(1 == (*(enemies.at(i))).getDirection())
+                switch((*(enemies.at(i))).getDirection())
                 {
-                    (*(enemies.at(i))).setDirection(0);
-                }
-                else if (0 == (*(enemies.at(i))).getDirection())
-                {
+                case 0:
                     (*(enemies.at(i))).setDirection(1);
+                    break;
+                case 1:
+                    (*(enemies.at(i))).setDirection(0);
+                    break;
                 }
-            }//Enemies turn if they hit a wall
+            }
         }
+
+        if (0 == (*(enemies.at(i))).getDirection()&&this->width()==(*(enemies.at(i))).getPosX()){
+            (*(enemies.at(i))).setDirection(1);
+        }
+
 
         if(enemyspawn.at(i) == location)
         {
@@ -332,14 +352,6 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
 
         if((*(enemies.at(i))).getActive())
         {
-            if(1 == (*(enemies.at(i))).getDirection())
-            {
-                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() - moveSpeed - 3);
-            }
-            else if (0 == (*(enemies.at(i))).getDirection())
-            {
-                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() + moveSpeed + 3);
-            }
             (*(enemies.at(i))).drawEnemy(painter);
         }//enemy moves based on time
 
