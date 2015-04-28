@@ -155,34 +155,28 @@
     <string>Ctrl+3</string>
    </property>
   </action>
-  <action name="Easy_2P">
-   <property name="text">
-    <string>Easy</string>
-   </property>
-  </action>
-  <action name="Medium_2P">
-   <property name="text">
-    <string>Medium</string>
-   </property>
-  </action>
-  <action name="Hard_2P">
-   <property name="text">
-    <string>Hard</string>
-   </property>
-  </action>
   <action name="actionContact_Us">
    <property name="text">
     <string>Contact Us</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
    </property>
   </action>
   <action name="actionControls">
    <property name="text">
     <string>Controls</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
   </action>
   <action name="actionHigh_Scores">
    <property name="text">
     <string>High Scores</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
    </property>
   </action>
  </widget>
