@@ -89,10 +89,10 @@ void Enemy::setDirection(int direc)
     switch(direction)
     {
     case RIGHT:
-        changeImage("../SuperCop/Images/Enemy/enemy0.png");
+        changeImage("../SuperCop/Images/Enemy/enemy1.png");
         break;
     case LEFT:
-        changeImage("../SuperCop/Images/Enemy/enemy1.png");
+        changeImage("../SuperCop/Images/Enemy/enemy0.png");
         break;
     }
 }//Mutator

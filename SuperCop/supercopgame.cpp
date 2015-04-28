@@ -160,13 +160,35 @@ void SuperCopGame::obstacleMovement()
 {
     for(unsigned int i = 0; i < enemies.size(); i++)
     {
+        for(unsigned int j = 0; j < walls.size(); j++)
+        {
+            QRect enemyRect, wallRect;
+            enemyRect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
+            wallRect = QRect((*(walls.at(j))).getWallPosX(),(*(walls.at(j))).getWallPosY(),(*(walls.at(j))).getWallSizeX(),(*(walls.at(j))).getWallSizeY());
+
+            if(enemyRect.intersects(wallRect) && (*(walls.at(j))).isActive())
+            {
+                if(0==(*(enemies.at(i))).getDirection())
+                {
+                    if((*(walls.at(j))).getWallPosX()+(*(walls.at(j))).getWallSizeX()>(*(enemies.at(i))).getPosX()&&(*(walls.at(j))).getWallPosX()+16<(*(enemies.at(i))).getPosX()&&(*(enemies.at(i))).getPosX()<this->width()){
+                        (*(enemies.at(i))).setDirection(1);
+                    }
+                }
+                if (1==(*(enemies.at(i))).getDirection()){
+                    if((*(walls.at(j))).getWallPosX()<(*(enemies.at(i))).getPosX()+(*(enemies.at(i))).getSizeX()&&(*(walls.at(j))).getWallPosX()+16>(*(enemies.at(i))).getPosX()+(*(enemies.at(i))).getSizeX()){
+                        (*(enemies.at(i))).setDirection(0);
+                    }
+                }
+            }
+        }//Enemies turn around when they hit walls
+
         if((*(enemies.at(i))).getActive())
         {
-            if(1 == (*(enemies.at(i))).getDirection())
+            if(0 == (*(enemies.at(i))).getDirection())
             {
                 (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() - moveSpeed - 3);
             }
-            else if (0 == (*(enemies.at(i))).getDirection())
+            else if (1 == (*(enemies.at(i))).getDirection())
             {
                 (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() + moveSpeed + 3);
             }
@@ -174,6 +196,14 @@ void SuperCopGame::obstacleMovement()
     }
     if((1 == lastKeyPress || 2 == lastKeyPress) && (player->getPosX() + player->getSizeX()) >= player->getRightBound()&& levelEnd->getPosX() >= 0)
     {
+        for(unsigned int i = 0; i < enemies.size(); i++)
+        {
+            if((*(enemies.at(i))).getActive())
+            {
+                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() - moveSpeed);
+            }
+        }//enemies appear to move faster when the player runs toward them
+
         for(unsigned int i = 0; i < platforms.size(); i++)
         {
             if((*(platforms.at(i))).isActive())
@@ -203,6 +233,14 @@ void SuperCopGame::obstacleMovement()
 
     if((4 == lastKeyPress || 2 == lastKeyPress) && (player->getPosX() <= player->getLeftBound())&&0<location)
     {
+        for(unsigned int i = 0; i < enemies.size(); i++)
+        {
+            if((*(enemies.at(i))).getActive())
+            {
+                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() + moveSpeed);
+            }
+        }//enemies appear to move slower when the player runs away
+
         for(unsigned int i = 0; i < platforms.size(); i++)
         {
             if((*(platforms.at(i))).isActive())
@@ -226,14 +264,6 @@ void SuperCopGame::obstacleMovement()
                 (*(donuts.at(i))).setPosX((*(donuts.at(i))).getPosX() + moveSpeed);
             }
         }//Donuts scroll
-
-        for(unsigned int i = 0; i < enemies.size(); i++)
-        {
-            if((*(enemies.at(i))).getActive())
-            {
-                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() + moveSpeed - 2);
-            }
-        }//enemies appear to move slower when the player runs away
 
         location-=(moveSpeed/5);
         levelEnd->setPosX(levelEnd->getPosX() + moveSpeed);
@@ -326,26 +356,8 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     {
         enemyRect = QRect((*(enemies.at(i))).getPosX(),(*(enemies.at(i))).getPosY(),(*(enemies.at(i))).getSizeX(),(*(enemies.at(i))).getSizeY());
 
-        for(unsigned int j = 0; j < walls.size(); j++)
-        {
-            wallRect = QRect((*(walls.at(j))).getWallPosX(),(*(walls.at(j))).getWallPosY(),(*(walls.at(j))).getWallSizeX(),(*(walls.at(j))).getWallSizeY());
-
-            if(enemyRect.intersects(wallRect) && (*(walls.at(j))).isActive())
-            {
-                switch((*(enemies.at(i))).getDirection())
-                {
-                case 0:
-                    (*(enemies.at(i))).setDirection(1);
-                    break;
-                case 1:
-                    (*(enemies.at(i))).setDirection(0);
-                    break;
-                }
-            }
-        }//Enemies turn around when they hit walls
-
-        if (0 == (*(enemies.at(i))).getDirection()&&this->width()==(*(enemies.at(i))).getPosX()){
-            (*(enemies.at(i))).setDirection(1);
+        if (1 == (*(enemies.at(i))).getDirection()&&this->width()<(*(enemies.at(i))).getPosX()){
+            (*(enemies.at(i))).setDirection(0);
         }//Enemies don't wander off the right side of the screen
 
 
