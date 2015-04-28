@@ -178,7 +178,7 @@ void SuperCopGame::obstacleMovement()
         {
             if((*(platforms.at(i))).isActive())
             {
-                (*(platforms.at(i))).setPlatformPosX((*(platforms.at(i))).getPlatformPosX() - 5);
+                (*(platforms.at(i))).setPlatformPosX((*(platforms.at(i))).getPlatformPosX() - moveSpeed);
             }
         }//Platforms scroll
 
@@ -186,7 +186,7 @@ void SuperCopGame::obstacleMovement()
         {
             if((*(walls.at(i))).isActive())
             {
-                (*(walls.at(i))).setWallPosX((*(walls.at(i))).getWallPosX() - 5);
+                (*(walls.at(i))).setWallPosX((*(walls.at(i))).getWallPosX() - moveSpeed);
             }
         }//Walls scroll
 
@@ -197,7 +197,7 @@ void SuperCopGame::obstacleMovement()
             }
         }//Donuts scroll
 
-        location++;
+        location+=(moveSpeed/5);
         levelEnd->setPosX(levelEnd->getPosX() - moveSpeed);
     }
 
@@ -207,7 +207,7 @@ void SuperCopGame::obstacleMovement()
         {
             if((*(platforms.at(i))).isActive())
             {
-                (*(platforms.at(i))).setPlatformPosX((*(platforms.at(i))).getPlatformPosX() + 5);
+                (*(platforms.at(i))).setPlatformPosX((*(platforms.at(i))).getPlatformPosX() + moveSpeed);
             }
         }//Platforms scroll
 
@@ -215,7 +215,7 @@ void SuperCopGame::obstacleMovement()
         {
             if((*(walls.at(i))).isActive())
             {
-                (*(walls.at(i))).setWallPosX((*(walls.at(i))).getWallPosX() + 5);
+                (*(walls.at(i))).setWallPosX((*(walls.at(i))).getWallPosX() + moveSpeed);
             }
         }//Walls scroll
 
@@ -231,11 +231,11 @@ void SuperCopGame::obstacleMovement()
         {
             if((*(enemies.at(i))).getActive())
             {
-                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() + 3);
+                (*(enemies.at(i))).setPosX((*(enemies.at(i))).getPosX() + moveSpeed - 2);
             }
         }//enemies appear to move slower when the player runs away
 
-        location--;
+        location-=(moveSpeed/5);
         levelEnd->setPosX(levelEnd->getPosX() + moveSpeed);
     }
 }//Scrolls objects across the screen as necessary
@@ -342,7 +342,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
                     break;
                 }
             }
-        }//Eenemies turn around when they hit walls
+        }//Enemies turn around when they hit walls
 
         if (0 == (*(enemies.at(i))).getDirection()&&this->width()==(*(enemies.at(i))).getPosX()){
             (*(enemies.at(i))).setDirection(1);
