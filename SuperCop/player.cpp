@@ -454,7 +454,7 @@ void Player::setOnWall(bool onWall)
 void Player::setOnPlatform(bool onPlat)
 {
     this->playerOnPlatform = onPlat;
-}//Mutator
+}
 
 void Player::setWallCollided(bool wallCollided)
 {

@@ -39,6 +39,7 @@ public:
     void run();
     void runInverted();
     void standBy();
+    void pausePlayer();
 
     void setPosX(int x);
     void setPosY(int y);

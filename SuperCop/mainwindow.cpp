@@ -3,6 +3,7 @@
 //and to make the menus accessible to the user.
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QFont>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     controls = NULL;
     hScore = NULL;
     scg = NULL;
+
 
 }//Sets the background image for the main menu
 
@@ -106,3 +108,28 @@ void MainWindow::on_Hard_1P_triggered()
     }
     scg->show();
 }//Creates a 1 player game on hard
+
+void MainWindow::on_easy_clicked()
+{
+    on_Easy_1P_triggered();
+}
+
+void MainWindow::on_medium_clicked()
+{
+    on_Medium_1P_triggered();
+}
+
+void MainWindow::on_hard_clicked()
+{
+    on_Hard_1P_triggered();
+}
+
+void MainWindow::on_highscores_clicked()
+{
+    on_actionHigh_Scores_triggered();
+}
+
+void MainWindow::on_exit_clicked()
+{
+    on_actionExit_triggered();
+}

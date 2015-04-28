@@ -35,6 +35,16 @@ private slots:
 
     void on_Hard_1P_triggered();
 
+    void on_easy_clicked();
+
+    void on_medium_clicked();
+
+    void on_hard_clicked();
+
+    void on_highscores_clicked();
+
+    void on_exit_clicked();
+
 private:
     Ui::MainWindow *ui;
     ContactUs* contact;

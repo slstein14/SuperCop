@@ -13,6 +13,9 @@
 #include <QKeyEvent>
 #include <QPixmap>
 #include <QMessageBox>
+#include <QLabel>
+#include <QPushButton>
+
 #include <enemy.h>
 #include <donut.h>
 #include <vector>
@@ -39,7 +42,8 @@ private:
     QTimer *timer;
     QTimer *keyTimer;
     QMessageBox *msg;
-
+    QMessageBox *pbox;
+    QFont *scoreFont;
     int picX,picY;
     int picHeight, picWidth;
     int lastKeyPress;
@@ -71,7 +75,6 @@ public:
     void obstacleMovement();
     void setVecs();
     void setHighScores();
-
     void setMoveSpeed(int spd);
 
 signals:
@@ -79,7 +82,6 @@ signals:
 public slots:
     void pollKey();
     void updateField();
-
 };
 
 #endif // SUPERCOPGAME_H
