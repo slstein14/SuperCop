@@ -332,7 +332,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     {
         donutRect = QRect((*(donuts.at(i))).getPosX(),(*(donuts.at(i))).getPosY(),(*(donuts.at(i))).getSizeX(),(*(donuts.at(i))).getSizeY());
 
-        if(donutspawn.at(i)==location)
+        if(donutspawn.at(i)<=location)
         {
             (*(donuts.at(i))).setActive(true);
         }//spawns a donut at each read location
@@ -366,7 +366,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
         }//Enemies don't wander off the right side of the screen
 
 
-        if(enemyspawn.at(i) == location)
+        if(enemyspawn.at(i) <= location)
         {
             (*(enemies.at(i))).setActive(true);
         }//spawns an enemy at each read location
@@ -397,7 +397,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     {
         wallRect = QRect((*(walls.at(i))).getWallPosX(), (*(walls.at(i))).getWallPosY(), (*(walls.at(i))).getWallSizeX(), (*(walls.at(i))).getWallSizeY());
 
-        if(wallSpawn.at(i) == location)
+        if(wallSpawn.at(i) <= location)
         {
             (*(walls.at(i))).setActive(true);
         }//Spawns a wall at each read location
@@ -413,7 +413,7 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
     {
         platRect = QRect((*(platforms.at(i))).getPlatformPosX(), (*(platforms.at(i))).getPlatformPosY(), (*(platforms.at(i))).getPlatformSizeX(), (*(platforms.at(i))).getPlatformSizeY());
 
-        if(platSpawn.at(i) == location)
+        if(platSpawn.at(i) <= location)
         {
             (*(platforms.at(i))).setActive(true);
         }//Spawns platform of each read location
@@ -518,11 +518,14 @@ void SuperCopGame::paintEvent(QPaintEvent *e)
 
     if(playerRect.intersects(levelEndRect))
     {
-        gamescore += 100;
-        timer->stop();
-        player->setPosX(player->getPosX() + 1);
-        msg->setText("Level Beaten");
-        msg->exec();
+        if(true==timer->isActive()){
+            gamescore += 100;
+            timer->stop();
+            player->setPosX(player->getPosX() + 1);
+            msg->setText("Level Beaten");
+            msg->exec();
+            this->setHighScores();
+        }
     }//Handles game winning scenario
 
 }//Handles Painting all elements on screen
