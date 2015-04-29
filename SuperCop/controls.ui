@@ -128,7 +128,7 @@
       <item>
        <widget class="QLabel" name="label_17">
         <property name="text">
-         <string>P, Escape</string>
+         <string>Escape</string>
         </property>
        </widget>
       </item>
