@@ -153,6 +153,7 @@ void Player::jump()
     }
     else
     {
+        upPressed = false;
         standBy();
     }
 }//Controls Player Jumps
